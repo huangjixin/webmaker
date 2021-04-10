@@ -1,6 +1,7 @@
 package com.hjx.webmaker.modules.core.web.admin;
 
 import com.hjx.webmaker.modules.base.web.BaseController;
+import com.hjx.webmaker.modules.core.domain.Attachment;
 import com.hjx.webmaker.modules.core.dto.ArticleDto;
 import com.hjx.webmaker.modules.core.dto.AttachmentDto;
 import com.hjx.webmaker.modules.core.service.IAttachmentService;
@@ -19,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("admin/attachment")
-public class AttachmentController<Attachment> extends BaseController {
+public class AttachmentController extends BaseController<Attachment> {
     private static Logger logger = LoggerFactory.getLogger(AttachmentController.class);
     private final static String prefix = "admin/core/attachment";
 

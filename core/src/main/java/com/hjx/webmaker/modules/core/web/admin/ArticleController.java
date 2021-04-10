@@ -1,6 +1,7 @@
 package com.hjx.webmaker.modules.core.web.admin;
 
 import com.hjx.webmaker.modules.base.web.BaseController;
+import com.hjx.webmaker.modules.core.domain.Article;
 import com.hjx.webmaker.modules.core.dto.ArticleDto;
 import com.hjx.webmaker.modules.core.dto.ChannelDto;
 import com.hjx.webmaker.modules.core.service.IArticleService;
@@ -19,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("admin/article")
-public class ArticleController<Article> extends BaseController {
+public class ArticleController extends BaseController<Article> {
 
     private static Logger logger = LoggerFactory.getLogger(ArticleController.class);
 
