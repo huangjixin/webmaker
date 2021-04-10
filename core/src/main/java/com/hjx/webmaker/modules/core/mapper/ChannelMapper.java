@@ -7,6 +7,6 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-public interface ChannelMapper<Channel> extends BaseMapper {
+public interface ChannelMapper extends BaseMapper<Channel> {
 
 }

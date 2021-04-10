@@ -1,5 +1,7 @@
 package com.hjx.webmaker.modules.core.domain;
 
+import com.hjx.webmaker.modules.base.utils.vo.Node;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -9,7 +11,7 @@ import java.util.Date;
  * @author XMSYQ
  * @date 2021-04-10 12:42:59
  */
-public class Channel implements Serializable {
+public class Channel extends Node implements Serializable {
     /**
      * 
      */
@@ -92,6 +94,7 @@ public class Channel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Override
     public Long getId() {
         return id;
     }
@@ -100,10 +103,12 @@ public class Channel implements Serializable {
         this.id = id;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
     }
@@ -172,6 +177,7 @@ public class Channel implements Serializable {
         this.updateBy = updateBy == null ? null : updateBy.trim();
     }
 
+    @Override
     public Long getParentId() {
         return parentId;
     }

@@ -2,6 +2,7 @@ package com.hjx.webmaker.modules.core.service.impl;
 
 import com.hjx.webmaker.modules.base.mapper.BaseMapper;
 import com.hjx.webmaker.modules.base.service.impl.BaseServiceImpl;
+import com.hjx.webmaker.modules.base.utils.TreeHelper;
 import com.hjx.webmaker.modules.core.domain.Channel;
 import com.hjx.webmaker.modules.core.mapper.ChannelMapper;
 import com.hjx.webmaker.modules.core.service.IChannelService;
@@ -9,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service(value = "channelService")
 public class ChannelServiceImpl extends BaseServiceImpl<Channel> implements IChannelService {
@@ -40,5 +43,18 @@ public class ChannelServiceImpl extends BaseServiceImpl<Channel> implements ICha
     @Override
     protected Logger getLogger() {
         return logger;
+    }
+
+
+    /**
+     * 打成树结构。
+     *
+     * @return
+     */
+    @Override
+    public List<Channel> getTree() {
+        List list = this.channelMapper.selectByExample(null);
+        list = TreeHelper.getTreeNodes(list);
+        return list;
     }
 }
