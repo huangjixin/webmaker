@@ -21,6 +21,6 @@ public class IChannelServiceTest {
     public void testInsert(){
         Channel channel = new Channel();
         int result = channelService.insert(channel);
-        System.out.println(result);
+        System.out.println(channel.getId());
     }
 }

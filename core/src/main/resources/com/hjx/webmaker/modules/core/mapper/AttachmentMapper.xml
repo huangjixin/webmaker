@@ -112,7 +112,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.hjx.webmaker.modules.core.domain.Attachment">
+  <insert id="insert" parameterType="com.hjx.webmaker.modules.core.domain.Attachment" useGeneratedKeys="true" keyProperty="id">
     insert into attachment (id, name, status, 
       decription, type, en_name, 
       created_time, update_time, created_by, 
@@ -124,7 +124,7 @@
       #{updateBy,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR}, 
       #{path,jdbcType=VARCHAR}, #{articleId,jdbcType=BIGINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.hjx.webmaker.modules.core.domain.Attachment">
+  <insert id="insertSelective" parameterType="com.hjx.webmaker.modules.core.domain.Attachment" useGeneratedKeys="true" keyProperty="id">
     insert into attachment
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

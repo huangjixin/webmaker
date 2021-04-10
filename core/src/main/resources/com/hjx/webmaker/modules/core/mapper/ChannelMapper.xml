@@ -114,7 +114,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.hjx.webmaker.modules.core.domain.Channel">
+  <insert id="insert" parameterType="com.hjx.webmaker.modules.core.domain.Channel" useGeneratedKeys="true" keyProperty="id">
     insert into channel (id, name, status, 
       decription, type, en_name, 
       created_time, update_time, created_by, 
@@ -128,7 +128,7 @@
       #{userId,jdbcType=BIGINT}, #{url,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.hjx.webmaker.modules.core.domain.Channel">
+  <insert id="insertSelective" parameterType="com.hjx.webmaker.modules.core.domain.Channel" useGeneratedKeys="true" keyProperty="id">
     insert into channel
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
