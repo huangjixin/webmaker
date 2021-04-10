@@ -1,0 +1,80 @@
+spring:
+  datasource:
+    druid:
+      url: jdbc:mysql://${dbhost:127.0.0.1}:${dbport:3306}/${dbname:webmaker}?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      username: ${dbusername:root}
+      password: ${dbpassword:root}
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      validation-query: SELECT 1 FROM DUAL
+      validation-query-timeout: 60000
+      filter:
+        stat:
+          db-type: mysql
+          log-slow-sql: true
+          slow-sql-millis: 5000
+        wall:
+          config:
+            delete-allow: true
+            drop-table-allow: true
+          db-type: mysql
+          enabled: true
+      initial-size: 5
+      max-active: 100
+      max-pool-prepared-statement-per-connection-size: 20
+      max-wait: 60000
+      min-evictable-idle-time-millis: 100000
+      min-idle: 5
+      pool-prepared-statements: true
+      stat-view-servlet:
+        allow: 127.0.0.1
+        enabled: true
+        login-password: admin
+        login-username: admin
+        reset-enable: false
+        url-pattern: /druid/*
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 60000
+      web-stat-filter:
+        enabled: true
+        exclusions: '*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*'
+        url-pattern: /*
+
+  redis:
+    pool:
+        max-active: 32
+        max-wait: 300
+        max-idle: 16
+        min-idle: 8
+    database: 0
+    host: ${redishost:127.0.0.1}
+    port: ${redisport:6379}
+    password:
+    #cluster:
+    #  nodes:
+    #    - 127.0.0.1:6379
+    #    - 127.0.0.1:6380
+    #    - 127.0.0.1:6381
+    #    - 127.0.0.1:6382
+    #    jedis:
+    lettuce:
+      pool:
+        # 连接池中的最大空闲连接 默认8
+        max-idle: 8
+        # 连接池中的最小空闲连接 默认0
+        min-idle: 0
+        # 连接池最大连接数 默认8 ，负数表示没有限制
+        max-active: 8
+        # 连接池最大阻塞等待时间（使用负值表示没有限制） 默认-1
+        max-wait: -1
+    timeout: 30000
+
+# -- 打印SQL日志。
+logging:
+  level:
+    com:
+      hjx:
+        webmaker:
+          core: DEBUG
+#  path: D://logs//

@@ -1,0 +1,62 @@
+server:
+  servlet:
+    context-path: /
+  port: 8888
+
+spring:
+  profiles:
+    active: @activatedProperties@
+  #  active: dev
+  #active: @profileActive@
+  application:
+    name: core-service
+  output:
+    ansi:
+      enabled: ALWAYS
+  resources:
+    static-locations: /META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,/WEB-INF/resources/
+  devtools:
+    livereload:
+      enabled: true #是否支持livereload
+    restart:
+      enabled: true  #设置开启热部署
+      additional-paths: resources/**,static/**,templates/**,webapp/**,public/**
+  resouces:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,classpath:/templates/
+  mvc:
+    static-path-pattern: /**
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    enabled: true
+    check-template: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: ALWAYS
+
+#配置MyBatis
+mybatis:
+  type-aliases-package: com.hjx.webmaker.modules.*.domain
+  mapper-locations: classpath:com/hjx/webmaker/modules/*/mapper/*.xml
+
+wx:
+  mp:
+    #公众号 APP_ID
+#    app-id: wxa416436501e84979
+    app-id: wx253edb88a84b178b
+    #公众号 APP_SECRET
+#    app-secret: 34675940168809761e576500c1fb529e
+    app-secret: 46f3bdc705e60dc9da2a5e97e40014d5
+    #公众号 TOKEN
+    token: huangjixinWeixinToken
+    #公众号 AES_KEY
+    aes-key:
+
