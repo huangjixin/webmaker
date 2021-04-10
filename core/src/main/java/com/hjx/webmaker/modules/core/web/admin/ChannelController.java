@@ -1,6 +1,7 @@
 package com.hjx.webmaker.modules.core.web.admin;
 
 import com.hjx.webmaker.modules.base.web.BaseController;
+import com.hjx.webmaker.modules.core.domain.Channel;
 import com.hjx.webmaker.modules.core.dto.ChannelDto;
 import com.hjx.webmaker.modules.core.service.IChannelService;
 import org.slf4j.Logger;
@@ -15,10 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Controller
 @RequestMapping("admin/channel")
-public class ChannelController<Channel> extends BaseController {
+public class ChannelController extends BaseController<Channel> {
     private static Logger logger = LoggerFactory.getLogger(ChannelController.class);
     private final static String prefix = "admin/core/channel";
 
@@ -34,12 +36,16 @@ public class ChannelController<Channel> extends BaseController {
 
     @GetMapping("create")
     public String create(Model uiModel, ChannelDto channelDto, HttpServletRequest request, HttpServletResponse response) {
+        List channels = this.channelService.getTree();
+        channelDto.setChildren(channels);
         uiModel.addAttribute("channel", channelDto);
         return prefix + "/create";
     }
 
     @GetMapping("edit/{id}")
     public String edit(Model uiModel, @PathVariable("id") String id, ChannelDto channelDto, HttpServletRequest request, HttpServletResponse response) {
+        Channel channel = this.channelService.selectByPrimaryKey(id);
+        channelDto = (ChannelDto) channel;
         uiModel.addAttribute("channel", channelDto);
         return prefix + "/edit";
     }
