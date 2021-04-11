@@ -21,7 +21,7 @@ class ChannelServiceImplTest {
 
     @Test
     void getTree() {
-        List<Channel> list = this.channelService.getTree(null);
+        List<Channel> list = this.channelService.getTree(null,null);
         System.out.println(list.toString());
     }
 }

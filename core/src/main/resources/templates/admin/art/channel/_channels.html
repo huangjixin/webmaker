@@ -76,8 +76,9 @@
         if(!selectedNode){
             return;
         }
-
-        window.location.href=root+"/admin/art/channel/edit/"+selectedNode.id;
+        var url = [[@{/admin/art/channel/edit/}]]+selectedNode.id;
+        console.log(url);
+        self.location.href = url;
     }
 
     function removeHandler(){

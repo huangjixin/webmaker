@@ -52,7 +52,7 @@ public class ChannelServiceImpl extends BaseServiceImpl<Channel> implements ICha
      * @return
      */
     @Override
-    public List<Channel> getTree(Long parentId) {
+    public List<Channel> getTree(Long parentId,Long channelId) {
         logger.info(getBaseMessage() + "查询树数据getTree开始，参数分别是parentId:{}", parentId);
 
         List list = this.channelMapper.selectByExample(null);
@@ -65,8 +65,14 @@ public class ChannelServiceImpl extends BaseServiceImpl<Channel> implements ICha
                 channel.getState().setChecked(true);
                 channel.getState().setSelected(true);
                 channel.getState().setExpanded(true);
-                break;
             }
+
+            if (channelId != null && channelId.equals(channel.getId())) {
+                channel.getState().setChecked(true);
+                channel.getState().setSelected(true);
+                channel.getState().setExpanded(true);
+            }
+
         }
 
         list = TreeHelper.getTreeNodes(list);

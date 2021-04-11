@@ -3,21 +3,26 @@
       xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
       layout:decorator="layout/admin/_application_layout">
-<title layout:fragment="title">频道管理</title>
+<title layout:fragment="title">文章管理-新增</title>
 
 <div layout:fragment="content">
     <div th:include="admin/shared/_header::header"></div>
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
-                <div th:include="admin/shared/_sidebar::sidebar('频道管理')"></div>
+                <div th:include="admin/shared/_sidebar::sidebar('文章管理')"></div>
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
                 <ul class="breadcrumb">
                     <li><a th:href="@{/admin/}">首页</a></li>
-                    <li><a th:href="@{/admin/art/channel}">频道管理</a></li>
+                    <li><a th:href="@{/admin/art/article}">文章管理</a></li>
                 </ul>
-                <div th:include="admin/art/channel/_channels::channels"></div>
+                <div>
+                    <h3 class="page-header">文章信息</h3>
+                    <form id="articleForm" class="form-horizontal" th:action="@{/admin/art/article}" accept-charset="UTF-8" method="post" style="max-width: 600px;">
+                        <div th:include="admin/art/article/_form::form_article"></div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

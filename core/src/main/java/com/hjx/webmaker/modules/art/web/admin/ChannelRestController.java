@@ -27,9 +27,10 @@ public class ChannelRestController extends BaseRestController<Channel> {
 
     @GetMapping("tree")
     public List tree(@RequestParam(name = "parentId", required = false) Long parentId,
+                     @RequestParam(name = "channelId", required = false) Long channelId,
                                     HttpServletRequest request, HttpServletResponse response) {
 
-        List list = this.channelService.getTree(parentId);
+        List list = this.channelService.getTree(parentId,channelId);
         return list;
     }
 }

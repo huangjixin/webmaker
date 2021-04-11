@@ -36,17 +36,15 @@ public class ArticleController extends BaseController<Article> {
     }
 
     @GetMapping("create")
-    public String create(Model uiModel, ArticleDto articleDto, ChannelDto channelDto, HttpServletRequest request, HttpServletResponse response) {
+    public String create(Model uiModel, ArticleDto articleDto, HttpServletRequest request, HttpServletResponse response) {
         uiModel.addAttribute("article", articleDto);
-        uiModel.addAttribute("chanels", channelDto);
         return prefix + "/create";
     }
 
     @GetMapping("edit/{id}")
-    public String edit(Model uiModel, @PathVariable("id") String id, ArticleDto articleDto, ChannelDto channelDto, HttpServletRequest request, HttpServletResponse response) {
-//        articleDto = (ArticleDto) this.articleService.selectByPrimaryKey(id);
+    public String edit(Model uiModel, @PathVariable("id") Long id,  HttpServletRequest request, HttpServletResponse response) {
+        ArticleDto articleDto = (ArticleDto) this.articleService.selectByPrimaryKey(id);
         uiModel.addAttribute("article", articleDto);
-        uiModel.addAttribute("chanels", channelDto);
         return prefix + "/edit";
     }
 }

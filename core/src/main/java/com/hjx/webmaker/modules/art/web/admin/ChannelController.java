@@ -71,5 +71,13 @@ public class ChannelController extends BaseController<Channel> {
         return "redirect:/" + prefix + "/create";
     }
 
+    @PostMapping("edit/{id}")
+    public String edit(Model uiModel, @PathVariable("id") Long id, Channel channel, HttpServletRequest request, HttpServletResponse response) {
+        Channel chan = this.channelService.selectByPrimaryKey(id);
 
+        channel.setUpdateTime(new Date());
+        this.channelService.updateByPrimaryKeySelective(channel);
+        uiModel.addAttribute("channel", channel);
+        return prefix + "/edit";
+    }
 }

@@ -14,8 +14,26 @@
     <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
     <result column="channel_id" jdbcType="BIGINT" property="channelId" />
   </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.hjx.webmaker.modules.art.domain.Article">
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.hjx.webmaker.modules.art.dto.ArticleDto">
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
+    <association property="channel" javaType="com.hjx.webmaker.modules.art.domain.Channel">
+      <id column="channel_id" jdbcType="BIGINT" property="id" />
+      <result column="channel_name" jdbcType="VARCHAR" property="name" />
+      <result column="channel_status" jdbcType="INTEGER" property="status" />
+      <result column="channel_decription" jdbcType="VARCHAR" property="decription" />
+      <result column="channel_type" jdbcType="VARCHAR" property="type" />
+      <result column="channel_en_name" jdbcType="VARCHAR" property="enName" />
+      <result column="channel_created_time" jdbcType="TIMESTAMP" property="createdTime" />
+      <result column="channel_update_time" jdbcType="TIMESTAMP" property="updateTime" />
+      <result column="channel_created_by" jdbcType="VARCHAR" property="createdBy" />
+      <result column="channel_update_by" jdbcType="VARCHAR" property="updateBy" />
+      <result column="channel_parent_id" jdbcType="BIGINT" property="parentId" />
+      <result column="channel_title" jdbcType="VARCHAR" property="title" />
+      <result column="channel_user_id" jdbcType="BIGINT" property="userId" />
+      <result column="channel_url" jdbcType="VARCHAR" property="url" />
+      <result column="channel_icon" jdbcType="VARCHAR" property="icon" />
+      <result column="channel_path" jdbcType="VARCHAR" property="path" />
+    </association>
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -76,11 +94,31 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, status, decription, type, en_name, created_time, update_time, created_by, 
-    update_by, channel_id
+    article.id,
+    article.name, article.status, article.decription, article.type, article.en_name, article.created_time, article.update_time,
+    article.created_by,
+    article.update_by, article.channel_id
   </sql>
   <sql id="Blob_Column_List">
-    content
+    article.content
+  </sql>
+  <sql id="Channel_Column_List" >
+    channel.id as channel_id,
+    channel.name as channel_name,
+    channel.status as channel_status,
+    channel.decription as channel_decription,
+    channel.type as channel_type,
+    channel.en_name as channel_en_name,
+    channel.created_time as channel_created_time,
+    channel.update_time as channel_update_time,
+    channel.created_by as channel_created_by,
+    channel.update_by as channel_update_by,
+    channel.parent_id as channel_parent_id,
+    channel.title as channel_title,
+    channel.user_id as channel_user_id,
+    channel.url as channel_url,
+    channel.icon as channel_icon,
+    channel.path as channel_path
   </sql>
   <select id="selectByExampleWithBLOBs" parameterType="com.hjx.webmaker.modules.art.domain.ArticleCriteria" resultMap="ResultMapWithBLOBs">
     select
@@ -123,8 +161,10 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from article
-    where id = #{id,jdbcType=BIGINT}
+    ,
+    <include refid="Channel_Column_List" />
+    from article left join channel on article.channel_id = channel.id
+    where article.id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from article
