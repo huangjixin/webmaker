@@ -1,0 +1,104 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<body th:fragment="sidebar(menuname)">
+<!--<ul id="main-nav" class="nav nav-sidebar  nav-stacked ml-auto">
+    <li th:class="${menuname.contains('系统首页')?'active':''}">
+        <a th:href="@{/admin/}">
+            <i class="fa fa-home" aria-hidden="true"></i>&nbsp;<label>系统首页</label>
+        </a>
+    </li>
+
+    <li>
+        <a href="#systemSetting" class="nav-header collapsed" data-toggle="collapse">
+            系统管理<span class="pull-right"><b>>></b></span>
+        </a>
+        <ul id="systemSetting" class="nav nav-list collapse secondmenu" style="height: 0px;">
+            <li>
+                <a href="#" style="padding-left:30px;" class="active">123123</a>
+            <li>
+            <li>
+                <a href="#" style="padding-left:30px;">tert</a>
+            <li>
+        </ul>
+    </li>
+    <li>
+        <a href="#">菜单管理</a>
+    <li>
+        <a href="#">组织管理</a>
+    <li>
+
+    <li class="active">
+        <a th:href="@{/admin/}">系统首页
+            <span class="sr-only">(current)</span></a>
+    </li>
+    <li>
+        <a href="#systemManage" class="nav-header collapsed" data-toggle="collapse">系统管理</a>
+        <ul id="systemManage" class="nav nav-list collapse secondmenu" style="height:0px;">
+            <li>
+                <a th:href="@{/admin/user}" style="padding-left:30px;">用户管理</a></li>
+            <li>
+                <a href="#" style="padding-left:30px;"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i>&nbsp;角色管理</a>
+            </li>
+            <li>
+                <a href="#" style="padding-left:30px;">菜单管理</a></li>
+            <li>
+                <a href="#" style="padding-left:30px;">组织管理</a></li>
+            <li>
+                <a href="#">岗位管理</a></li>
+            <li>
+                <a href="#">日志管理</a></li>
+            <li>
+                <a href="#">密码重置</a></li>
+        </ul>
+    </li>
+</ul>-->
+
+<ul id="main-nav" class="nav nav-sidebar  nav-stacked ml-auto">
+    <li th:class="${menuname.contains('系统首页')?'active':''}">
+        <a th:href="@{/admin/}">
+            <i class="fa fa-home" aria-hidden="true"></i>&nbsp;<label>系统首页</label>
+        </a>
+    </li>
+
+    <!--<li th:if="${session.user != null && session.user.permissions != null }" data-th-each="menu : ${session.user.permissions}" th:class="${menuname.contains(menu.name)?'active':''}">
+        <a th:href="@{${menu.url}}" th:if="${menu.children == null }">
+            <label th:text="${menu.name}"></label>
+        </a>
+        <a th:id="${'code'+menu.code}" th:href="${'#menu'+menu.id}" th:if="${menu.children != null }"  class="nav-header collapsed" data-toggle="collapse">
+            <label  th:text="${menu.name}"></label><span class="pull-right"><b>>></b></span>
+        </a>
+        <ul th:id="${'menu'+menu.id}" th:if="${menu.children != null }"  class="nav nav-list collapse secondmenu" style="height:0px;">
+            <li data-th-each="child : ${menu.children}"  th:class="${child.name.contains(menuname)?'active':''}">
+                <a th:href="@{${child.url}}" style="padding-left:30px;">
+                    <span th:text="${child.name}"></span>
+                </a>
+            </li>
+        </ul>
+    </li>-->
+</ul>
+
+<!--<ul class="nav nav-sidebar  ml-auto" th:if="${session.user.permissions}">
+    <li  th:class="${menuname.contains('系统首页')?'active':''}">
+        <a th:href="@{/admin/}">
+            <i class="fa fa-home" aria-hidden="true"></i>&nbsp;<label>系统首页</label>
+        </a>
+    </li>
+    <li data-th-each="menu : ${session.user.permissions}" th:class="${menuname.contains(menu.name)?'active':''}">
+        &lt;!&ndash;<a th:href="@{${menu.url}}"><label  th:text="${menu.name}"></label></a>&ndash;&gt;
+        <a th:href="@{${menu.url}}" th:if="${menu.children == null }">
+            &lt;!&ndash;<i th:class="${menu.icon}" aria-hidden="true"></i>&ndash;&gt;&nbsp;<label th:text="${menu.name}"></label>
+        </a>
+        <a th:href="${'#menu'+menu.id}" class="nav-header collapsed" data-toggle="collapse" th:if="${menu.children != null }">
+            &lt;!&ndash;<i th:class="${menu.icon}" aria-hidden="true"></i>&ndash;&gt;&nbsp;<label th:text="${menu.name}"></label>
+        </a>
+        <ul th:id="${'menu'+menu.id}" th:if="${menu.children != null }" th:class="${menu.children == null && menuname.indexOf(menu.name)>0?'nav nav-sidebar nav-list  secondmenu collapse':'nav nav-sidebar nav-list  secondmenu'}" style="height:0px;">
+            &lt;!&ndash;如果要关闭请在class加上collapse&ndash;&gt;
+            <li data-th-each="child : ${menu.children}" th:class="${child.name==menuname?'active':''}">
+                <a th:href="@{${child.url}}" style="padding-left:50px;">
+                    &lt;!&ndash;<i th:class="${child.icon}" aria-hidden="true"></i>&ndash;&gt;&nbsp;<span th:text="${child.name}"></span>
+                </a>
+            </li>
+        </ul>
+    </li>
+</ul>-->
+</body>
