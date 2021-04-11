@@ -60,7 +60,7 @@
 <div class="form-group">
     <label class="col-md-2 control-label" for="content">内容</label>
     <div class="col-md-10">
-        <textarea id="content" name="content" class="form-control xheditor" rows="12"
+        <textarea id="content" name="content" class="form-control xheditor" rows="24"
                   data-bv-notempty="true"
                   data-bv-notempty-message="不能为空"
                   placeholder="内容编辑"
@@ -96,7 +96,12 @@
     //树创建
     createTreeView();
 
-    //init_xheditor();
+    init_xheditor();
+
+    $("#articleForm").submit(function(e){
+         $("#content").val();
+        alert($("#content").val();
+    });
   });
 
   // 创建编辑器。

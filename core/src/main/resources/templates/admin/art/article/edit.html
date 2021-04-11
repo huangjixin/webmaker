@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
       layout:decorator="layout/admin/_application_layout">
 <title layout:fragment="title">文章管理-编辑</title>
 
@@ -19,7 +18,8 @@
                 </ul>
                 <div>
                     <h3 class="page-header">文章信息</h3>
-                    <form id="articleForm" class="form-horizontal" th:action="@{/admin/art/article}" accept-charset="UTF-8" method="post" style="max-width: 600px;">
+                    <form id="articleForm" class="form-horizontal" th:action="@{'/admin/art/article/edit/'+${article.id}}"
+                          accept-charset="UTF-8" method="post" style="max-width: 800px;">
                         <div th:include="admin/art/article/_form::form_article"></div>
                     </form>
                 </div>

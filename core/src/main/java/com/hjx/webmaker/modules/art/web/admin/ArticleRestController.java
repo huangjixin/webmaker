@@ -91,6 +91,8 @@ public class ArticleRestController extends BaseRestController<Article> {
 
                 example.setOrderByClause(sort + " " + sortOrder);
             }
+        }else{
+            example.setOrderByClause( "created_time desc");
         }
         return example;
     }

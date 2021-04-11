@@ -1,5 +1,6 @@
 package com.hjx.webmaker.modules.art.service.impl;
 
+import com.hjx.webmaker.modules.art.dto.ArticleDto;
 import com.hjx.webmaker.modules.base.mapper.BaseMapper;
 import com.hjx.webmaker.modules.base.service.impl.BaseServiceImpl;
 import com.hjx.webmaker.modules.art.domain.Article;
@@ -58,5 +59,10 @@ public class ArticleServiceImpl extends BaseServiceImpl<Article> implements IArt
     @Override
     public int updateByPrimaryKeyWithBLOBs(Article record) {
         return this.articleMapper.updateByPrimaryKeyWithBLOBs(record);
+    }
+
+    @Override
+    public ArticleDto selectByPrimaryKey(Object id){
+        return this.articleMapper.selectByPrimaryKey(id);
     }
 }
