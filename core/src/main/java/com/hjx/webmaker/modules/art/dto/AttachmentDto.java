@@ -4,7 +4,7 @@ import com.hjx.webmaker.modules.art.domain.Article;
 import com.hjx.webmaker.modules.art.domain.Attachment;
 
 public class AttachmentDto extends Attachment {
-    private Article article;
+    private Article article = new Article();
 
     public Article getArticle() {
         return article;

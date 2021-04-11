@@ -15,7 +15,7 @@ public class Node {
 
     private Object parentId;//父结点id
 
-    private String name;//结点值
+//    private String name;//结点值
 
     private List<Node> children = new ArrayList<>();//孩子结点列表
 
@@ -41,13 +41,13 @@ public class Node {
         this.parentId = parentId;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+//    public String getName() {
+//        return name;
+//    }
+//
+//    public void setName(String name) {
+//        this.name = name;
+//    }
 
     public List<Node> getChildren() {
         return children;
@@ -58,7 +58,7 @@ public class Node {
     }
 
     public List<Node> getNodes() {
-        return nodes;
+        return this.children;
     }
 
     public void setNodes(List<Node> nodes) {

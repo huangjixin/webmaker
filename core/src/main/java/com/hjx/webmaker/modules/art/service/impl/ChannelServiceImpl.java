@@ -1,11 +1,11 @@
 package com.hjx.webmaker.modules.art.service.impl;
 
-import com.hjx.webmaker.modules.base.mapper.BaseMapper;
-import com.hjx.webmaker.modules.base.service.impl.BaseServiceImpl;
-import com.hjx.webmaker.modules.base.utils.TreeHelper;
 import com.hjx.webmaker.modules.art.domain.Channel;
 import com.hjx.webmaker.modules.art.mapper.ChannelMapper;
 import com.hjx.webmaker.modules.art.service.IChannelService;
+import com.hjx.webmaker.modules.base.mapper.BaseMapper;
+import com.hjx.webmaker.modules.base.service.impl.BaseServiceImpl;
+import com.hjx.webmaker.modules.base.utils.TreeHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,9 +52,26 @@ public class ChannelServiceImpl extends BaseServiceImpl<Channel> implements ICha
      * @return
      */
     @Override
-    public List<Channel> getTree() {
+    public List<Channel> getTree(Long parentId) {
+        logger.info(getBaseMessage() + "查询树数据getTree开始，参数分别是parentId:{}", parentId);
+
         List list = this.channelMapper.selectByExample(null);
+
+        Channel channel = null;
+        for (int i = 0; i < list.size(); i++) {
+            channel = (Channel) list.get(i);
+
+            if (parentId != null && parentId.equals(channel.getId())) {
+                channel.getState().setChecked(true);
+                channel.getState().setSelected(true);
+                channel.getState().setExpanded(true);
+                break;
+            }
+        }
+
         list = TreeHelper.getTreeNodes(list);
+
+        logger.info(getBaseMessage() + "查询树数据getTree结束，结果list是:{}", list.toString());
         return list;
     }
 }

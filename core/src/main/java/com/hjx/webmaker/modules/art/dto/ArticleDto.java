@@ -4,11 +4,12 @@ import com.hjx.webmaker.modules.art.domain.Article;
 import com.hjx.webmaker.modules.art.domain.Attachment;
 import com.hjx.webmaker.modules.art.domain.Channel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ArticleDto extends Article {
-    private Channel channel;
-    private List<Attachment> attachments;
+    private Channel channel = new Channel();
+    private List<Attachment> attachments = new ArrayList<>();
 
     public Channel getChannel() {
         return channel;

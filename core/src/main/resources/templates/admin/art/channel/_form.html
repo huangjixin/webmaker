@@ -13,77 +13,58 @@
 <!--<script src="https://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.3/js/language/zh_CN.min.js"></script>-->
 
 <div class="form-group">
-    <label class="col-md-2 control-label" for="name">用户名</label>
+    <label class="col-md-2 control-label" for="name">名称</label>
     <div class="col-md-10">
-        <input id="name" name="loginName" class="form-control"
+        <input id="name" name="name" class="form-control"
                data-bv-notempty="true"
                data-bv-notempty-message="不能为空"
-               placeholder="用户名"
+               placeholder="名称"
                th:value="${channel.name}"
                required>
-        <span th:if="${#fields.hasErrors('channel.name')}" th:errors="${user.name}"></span>
-    </div>
-</div>
-<!--<div class="form-group" id="password-form-group">
-    <label class="col-md-2 control-label" for="password">密 码</label>
-    <div class="col-md-10">
-        <input id="password" type="password" name="password" class="form-control" placeholder="密  码" required
-               th:value="${user.password}">
-        <span th:if="${#fields.hasErrors('user.loginName')}" th:errors="${user.loginName}"></span>
-    </div>
-</div>
-<div class="form-group" id="password_confirmation-form-group">
-    <label class="col-md-2 control-label" for="password_confirmation">确认密码</label>
-    <div class="col-md-10">
-        <input id="password_confirmation" type="password" name="password_confirmation" class="form-control"
-               placeholder="确认密码" required
-               th:value="${user.password}"></div>
-</div>
-<div class="form-group">
-    <label class="col-md-2 control-label" for="realName">真实姓名</label>
-    <div class="col-md-10">
-        <input id="realName" type="text" name="realName" class="form-control" placeholder="真实姓名" required
-               th:value="${user.realName}">
-        <span th:if="${#fields.hasErrors('user.realName')}" th:errors="${user.realName}"></span>
+        <span th:if="${#fields.hasErrors('channel.name')}" th:errors="${channel.name}"></span>
     </div>
 </div>
 <div class="form-group">
-    <label class="col-md-2 control-label" for="enName">英文名称</label>
+    <label class="col-md-2 control-label" for="enName">名称(英文)</label>
     <div class="col-md-10">
-        <input id="enName" type="text" name="enName" class="form-control" placeholder="英文名称"
-               th:value="${user.enName}">
-        <span th:if="${#fields.hasErrors('user.enName')}" th:errors="${user.enName}"></span>
+        <input id="enName" name="enName" class="form-control"
+               data-bv-notempty="true"
+               data-bv-notempty-message="不能为空"
+               placeholder="名称(英文)"
+               th:value="${channel.enName}"
+               required>
+        <span th:if="${#fields.hasErrors('channel.enName')}" th:errors="${channel.enName}"></span>
     </div>
 </div>
 <div class="form-group">
-    <label class="col-md-2 control-label" for="mobile">电话</label>
+    <label class="col-md-2 control-label" for="title">标题</label>
     <div class="col-md-10">
-        <input id="mobile" type="text" name="mobile" class="form-control" placeholder="电话"
-               th:value="${user.mobile}">
-        <span th:if="${#fields.hasErrors('user.mobile')}" th:errors="${user.mobile}"></span>
+        <input id="title" name="title" class="form-control"
+               placeholder="标题"
+               th:value="${channel.title}"
+               required>
+        <span th:if="${#fields.hasErrors('channel.title')}" th:errors="${channel.title}"></span>
     </div>
 </div>
+
 <div class="form-group">
-    <label class="col-md-2 control-label" for="email">邮箱</label>
+    <label class="col-md-2 control-label" for="url">连接</label>
     <div class="col-md-10">
-        <input id="email" type="text" name="email" class="form-control" placeholder="邮箱"
-               th:value="${user.email}">
-        <span th:if="${#fields.hasErrors('user.email')}" th:errors="${user.email}"></span>
+        <input id="url" name="url" class="form-control"
+               placeholder="连接"
+               th:value="${channel.url}">
+        <span th:if="${#fields.hasErrors('channel.url')}" th:errors="${channel.url}"></span>
     </div>
 </div>
+
 <div class="form-group">
-    <label class="col-md-2 control-label" for="roleIds">角色</label>
+    <label class="col-md-2 control-label" for="treeview">父亲节点</label>
     <div class="col-md-10">
-        <input id="roleIds" type="checkbox" name="roleIds" th:each="role:${roles}"
-               th:value="${role.id}"
-               th:text="'&nbsp;'+${role.name+'&nbsp;&nbsp;&nbsp;&nbsp;'}"
-               th:attr="checked=${user.roleIds.contains(role.id)?true:false}">
+        <input id="parentId" name="parentId" type="hidden" th:value="${channel.parentId}">
+        <div id="treeview"></div>
     </div>
 </div>
-<div class="actions form-group">
-    <label class="col-md-2 control-label"></label>
-    <div th:text="${#request.getAttribute('msg')}"  class="col-md-10" style="color:red;"></div>
-</div>-->
+<input id="id" name="id" type="hidden" th:value="${channel.id}">
 
 <div class="actions form-group">
     <div class="col-md-2"></div>
@@ -100,9 +81,15 @@
 <script th:inline="javascript">
   var root = [[${#servletContext.contextPath}]];
 
+  $(function() {
+    validateFields();
+    //树创建
+    createTreeView();
+  });
+
   //验证表单。
   function validateFields(){
-    $('#userForm').bootstrapValidator({
+    $('#channelForm').bootstrapValidator({
           live : 'enabled', //enabled代表当表单控件内容发生变化时就触发验证，默认提交时验证，
           // 默认的提示消息
           message: '该值验证不通过',
@@ -113,20 +100,33 @@
             　　validating: 'glyphicon glyphicon-refresh'
           },
           fields: {
-            loginName: {
-              message: '用户名验证失败',
+            name: {
+              message: '名称验证失败',
               validators: {
                 notEmpty: {
-                  message: '用户名不能为空'
+                  message: '名称不能为空'
                 },
                 stringLength: { //长度限制
-                  min: 5,
-                  max: 18,
-                  message: '用户名长度必须在6到18位之间'
+                  min: 1,
+                  max: 40,
+                  message: '名称长度必须在2到18位之间'
                 },
-                regexp: { //正则表达式
-                  regexp: /^[a-zA-Z0-9_]+$/,
-                  message: '用户名只能包含大写、小写、数字和下划线'
+                //regexp: { //正则表达式
+                //  regexp: /^[a-zA-Z0-9_]+$/,
+                //  message: '用户名只能包含大写、小写、数字和下划线'
+                //}
+              }
+            },
+            enName: {
+              message: '名称验证失败',
+              validators: {
+                notEmpty: {
+                  message: '名称不能为空'
+                },
+                stringLength: { //长度限制
+                  min: 1,
+                  max: 40,
+                  message: '名称长度必须在2到18位之间'
                 }
               }
             },
@@ -179,9 +179,29 @@
         })
   }
 
-  $(function() {
-    validateFields();
-  });
+  function createTreeView(){
+      //var url= '[[@{/admin/sys/permission/tree}]]';   //  + '?parentId='+$("#parentId").val();
+      var url= root + '/admin/art/channel/tree?parentId='+$("#parentId").val();
+      $.ajax({
+        url: url,
+        cache: false,
+        dataType: 'json',
+        success: function (datasource) {
+          console.log(datasource);
+          $('#treeview').treeview({
+            data: datasource,
+            showCheckbox:false,
+            onNodeSelected: function (event, node) {
+                $("#parentId").val(node.id);
+                selecedNode = node;
+            },
+          });
+        },
+        error: function () {
+          alert("异常！");
+        }
+      })
+    }
 
 </script>
 </body>

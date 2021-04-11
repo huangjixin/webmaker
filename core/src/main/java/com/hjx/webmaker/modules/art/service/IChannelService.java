@@ -11,5 +11,5 @@ public interface IChannelService extends IBaseService<Channel> {
      *
      * @return
      */
-    List<Channel> getTree();
+    List<Channel> getTree(Long parentId);
 }

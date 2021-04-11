@@ -1,5 +1,6 @@
 package com.hjx.webmaker.modules.art.domain;
 
+import com.hjx.webmaker.modules.base.domain.State;
 import com.hjx.webmaker.modules.base.utils.vo.Node;
 
 import javax.validation.constraints.NotNull;
@@ -96,6 +97,16 @@ public class Channel extends Node implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private State state = new State();
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
     @Override
     public Long getId() {
         return id;
@@ -105,12 +116,10 @@ public class Channel extends Node implements Serializable {
         this.id = id;
     }
 
-    @Override
     public String getName() {
         return name;
     }
 
-    @Override
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
     }
@@ -226,6 +235,14 @@ public class Channel extends Node implements Serializable {
 
     public void setPath(String path) {
         this.path = path == null ? null : path.trim();
+    }
+
+    private String text;
+    public String getText() {
+        return ""+ this.name;
+    }
+    public void setText(String text) {
+        this.text = text;
     }
 
     @Override

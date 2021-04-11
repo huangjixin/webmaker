@@ -17,7 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
+import java.util.Date;
 
 @Controller
 @RequestMapping("admin/art/channel")
@@ -37,17 +37,17 @@ public class ChannelController extends BaseController<Channel> {
 
     @GetMapping("create")
     public String create(Model uiModel, ChannelDto channelDto, HttpServletRequest request, HttpServletResponse response) {
-        List channels = this.channelService.getTree();
-        channelDto.setChildren(channels);
+//        List channels = this.channelService.getTree(null);
+//        channelDto.setChildren(channels);
         uiModel.addAttribute("channel", channelDto);
         return prefix + "/create";
     }
 
     @GetMapping("edit/{id}")
-    public String edit(Model uiModel, @PathVariable("id") String id, ChannelDto channelDto, HttpServletRequest request, HttpServletResponse response) {
+    public String edit(Model uiModel, @PathVariable("id") Long id, HttpServletRequest request, HttpServletResponse response) {
         Channel channel = this.channelService.selectByPrimaryKey(id);
-        channelDto = (ChannelDto) channel;
-        uiModel.addAttribute("channel", channelDto);
+
+        uiModel.addAttribute("channel", channel);
         return prefix + "/edit";
     }
 
@@ -62,7 +62,10 @@ public class ChannelController extends BaseController<Channel> {
         if (bindingResult.hasErrors()) {
             return prefix + "/create";
         }
-
+        if (null == channelDto.getParentId() || "".equals(channelDto.getParentId())) {
+            channelDto.setParentId(Long.valueOf(0));
+        }
+        channelDto.setCreatedTime(new Date());
         this.channelService.insert(channelDto);
         attributes.addAttribute("msg", "执行成功");
         return "redirect:/" + prefix + "/create";

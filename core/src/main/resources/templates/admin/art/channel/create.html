@@ -20,7 +20,7 @@
                 </ul>
                 <div>
                     <h3 class="page-header">频道信息</h3>
-                    <form id="userForm" class="form-horizontal" th:action="@{/admin/art/channel}" accept-charset="UTF-8" method="post" style="max-width: 600px;">
+                    <form id="channelForm" class="form-horizontal" th:action="@{/admin/art/channel}" accept-charset="UTF-8" method="post" style="max-width: 600px;">
                         <div th:include="admin/art/channel/_form::form_channel"></div>
                     </form>
                 </div>
@@ -29,7 +29,7 @@
     </div>
     <script>
         $(function () {
-            $("#codesys").trigger("click");
+            $("#artHref").trigger("click");
         });
 
     </script>

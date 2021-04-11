@@ -1,0 +1,113 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<body th:fragment="channels">
+<link rel="stylesheet" th:href="@{/js/bootstrap-treeview.min.css}">
+<script th:src="@{/js/bootstrap-treeview.min.js}"></script>
+<!--<link href="https://cdn.bootcss.com/bootstrap-treeview/1.2.0/bootstrap-treeview.min.css" rel="stylesheet">
+<script src="https://cdn.bootcss.com/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js"></script>-->
+<h3 class="page-header">频道数据</h3>
+<div id="toolbar">
+    <a th:href="@{/admin/art/channel/create}">
+        <button id="addBtn" type="button" class="btn btn-success">
+            <i class="fa fa-plus" aria-hidden="true">&nbsp;添加</i></button>
+    </a>
+    <button id="removeBtn" class="btn btn-danger" disabled onclick="removeHandler();">
+        <i class="glyphicon glyphicon-remove"></i>&nbsp;删除
+    </button>
+    <button id="editBtn" class="btn btn-warning" disabled onclick="editHandler();">
+        <i class="glyphicon glyphicon-pencil"></i>&nbsp;编辑
+    </button>
+</div>
+<br>
+<div id="treeview"></div>
+<script th:inline="javascript">
+    var root = [[${ #servletContext.contextPath }]];
+    var selectedNode;
+
+    //Json格式的要求{total:22,rows:{}}
+
+    $(document).ready(function () {
+      createTreeView();
+    })
+
+    function createTreeView(){
+      $.ajax({
+        url: [[@{/admin/art/channel/tree}]],
+        cache: false,
+        dataType: 'json',
+        success: function (datasource) {
+          console.log(datasource);
+          $('#treeview').treeview({
+            data: datasource,
+            onNodeSelected: function (event, node) {
+              $("#removeBtn").attr("disabled",false);
+              $("#editBtn").attr("disabled",false);
+              // var Pid = $('#treeview').treeview('getParent', node.nodeId);  //获取父辈id
+              // //路径追加显示
+              // function func(nodeId, text) //递归调用
+              // {
+              //   if (nodeId == 0) {
+              //     return '富士化工';
+              //   }
+              //   var id = $('#treeview').treeview('getParent', nodeId);
+              //   return func(id.nodeId, id.text) + " > " + text;
+              // }
+              // var locationText = func(node.nodeId, node.text);
+              // $(selectors.currentLocation).html('当前位置：' + locationText);
+
+              selectedNode = node;
+              $('#removeBtn').attr("disabled",false);
+              $('#editBtn').attr("disabled",false);
+            },
+            onNodeUnselected: function (event, node) {
+                selectedNode = null;
+                $('#removeBtn').attr("disabled",true);
+                $('#editBtn').attr("disabled",true);
+            }
+          });
+        },
+        error: function () {
+          alert("异常！");
+        }
+      })
+    }
+
+    function editHandler(){
+        if(!selectedNode){
+            return;
+        }
+
+        window.location.href=root+"/admin/art/channel/edit/"+selectedNode.id;
+    }
+
+    function removeHandler(){
+        if(!selectedNode){
+            return;
+        }
+
+        if(confirm('此操作不可逆，请确认是否删除？')){
+              $.ajax({
+                        url: root + '/admin/art/channel/deleteByKey/'+selectedNode.id,
+                        cache: false,
+                        type: "delete",
+                        dataType: 'json',
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            if(data.code == 200){
+                                selectedNode = null;
+                                $('#treeview').treeview("refresh");
+                                createTreeView();
+                            }else{
+                                alert(data.msg);
+                            }
+                        },
+                        error: function () {
+                          alert("异常！");
+                        }
+                    });
+        }
+    }
+
+
+</script>
+</body>

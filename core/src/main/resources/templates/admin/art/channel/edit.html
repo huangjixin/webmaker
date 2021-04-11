@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorator="layout/admin/_application_layout">
+<title layout:fragment="title">频道管理-编辑</title>
+
+<div layout:fragment="content">
+    <div th:include="admin/shared/_header::header"></div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+                <div th:include="admin/shared/_sidebar::sidebar('频道管理')"></div>
+            </div>
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                <ul class="breadcrumb">
+                    <li><a th:href="@{/admin/}">首页</a></li>
+                    <li><a th:href="@{/admin/art/channel}">频道管理</a></li>
+                    <li><a th:href="@{/admin/art/channel/create}">新增</a></li>
+                </ul>
+                <div>
+                    <h3 class="page-header">频道信息</h3>
+                    <form id="channelForm" class="form-horizontal" th:action="@{/admin/art/channel}" accept-charset="UTF-8" method="post" style="max-width: 600px;">
+                        <div th:include="admin/art/channel/_form::form_channel"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $("#artHref").trigger("click");
+        });
+
+    </script>
+</div>
+</html>
