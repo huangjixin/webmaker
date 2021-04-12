@@ -1,21 +1,21 @@
 package com.hjx.webmaker.modules.art.web.admin;
 
-import com.hjx.webmaker.modules.art.domain.Channel;
-import com.hjx.webmaker.modules.base.web.BaseController;
 import com.hjx.webmaker.modules.art.domain.Article;
 import com.hjx.webmaker.modules.art.dto.ArticleDto;
-import com.hjx.webmaker.modules.art.dto.ChannelDto;
 import com.hjx.webmaker.modules.art.service.IArticleService;
+import com.hjx.webmaker.modules.base.web.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -64,6 +64,12 @@ public class ArticleController extends BaseController<Article> {
         }
 
         articleDto.setCreatedTime(new Date());
+        String content = articleDto.getContent();
+        if (!StringUtils.isEmpty(content)) {
+            content = HtmlUtils.htmlEscape(content);
+        }
+        articleDto.setContent(content);
+
         this.articleService.insert(articleDto);
         attributes.addAttribute("msg", "执行成功");
         return "redirect:/" + prefix + "/create";
@@ -74,8 +80,13 @@ public class ArticleController extends BaseController<Article> {
         ArticleDto chan = this.articleService.selectByPrimaryKey(id);
 
         articleDto.setUpdateTime(new Date());
+        String content = articleDto.getContent();
+        if (!StringUtils.isEmpty(content)) {
+            content = HtmlUtils.htmlEscape(content);
+        }
+        articleDto.setContent(content);
         int result = this.articleService.updateByPrimaryKeySelective(articleDto);
         uiModel.addAttribute("article", articleDto);
-        return prefix + "/edit";
+        return  prefix + "/edit/";
     }
 }

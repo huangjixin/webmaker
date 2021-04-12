@@ -38,13 +38,13 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
     }
 
     @Override
-    public int insert(Object record) {
+    public int insert(T record) {
         int result = getBaseMapper().insert(record);
         return result;
     }
 
     @Override
-    public int insertSelective(Object record) {
+    public int insertSelective(T record) {
         int result = getBaseMapper().insertSelective(record);
         return result;
     }
@@ -68,25 +68,25 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
     }
 
     @Override
-    public int updateByExampleSelective(Object record, Object example) {
+    public int updateByExampleSelective(T record, Object example) {
         int result = getBaseMapper().updateByExampleSelective(record, example);
         return result;
     }
 
     @Override
-    public int updateByExample(Object record, Object example) {
+    public int updateByExample(T record, Object example) {
         int result = getBaseMapper().updateByExample(record, example);
         return result;
     }
 
     @Override
-    public int updateByPrimaryKeySelective(Object record) {
+    public int updateByPrimaryKeySelective(T record) {
         int result = getBaseMapper().updateByPrimaryKeySelective(record);
         return result;
     }
 
     @Override
-    public int updateByPrimaryKey(Object record) {
+    public int updateByPrimaryKey(T record) {
         int result = getBaseMapper().updateByPrimaryKey(record);
         return result;
     }

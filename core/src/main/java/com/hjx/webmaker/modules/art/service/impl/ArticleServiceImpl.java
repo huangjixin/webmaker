@@ -1,16 +1,18 @@
 package com.hjx.webmaker.modules.art.service.impl;
 
-import com.hjx.webmaker.modules.art.dto.ArticleDto;
-import com.hjx.webmaker.modules.base.mapper.BaseMapper;
-import com.hjx.webmaker.modules.base.service.impl.BaseServiceImpl;
 import com.hjx.webmaker.modules.art.domain.Article;
 import com.hjx.webmaker.modules.art.domain.ArticleCriteria;
+import com.hjx.webmaker.modules.art.dto.ArticleDto;
 import com.hjx.webmaker.modules.art.mapper.ArticleMapper;
 import com.hjx.webmaker.modules.art.service.IArticleService;
+import com.hjx.webmaker.modules.base.mapper.BaseMapper;
+import com.hjx.webmaker.modules.base.service.impl.BaseServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.util.HtmlUtils;
 
 import java.util.List;
 
@@ -58,11 +60,48 @@ public class ArticleServiceImpl extends BaseServiceImpl<Article> implements IArt
 
     @Override
     public int updateByPrimaryKeyWithBLOBs(Article record) {
+        String content = record.getContent();
+        if(!StringUtils.isEmpty(content)){
+            content = HtmlUtils.htmlEscape(content);
+        }
+        record.setContent(content);
+
         return this.articleMapper.updateByPrimaryKeyWithBLOBs(record);
     }
 
     @Override
     public ArticleDto selectByPrimaryKey(Object id){
-        return this.articleMapper.selectByPrimaryKey(id);
+        ArticleDto record = this.articleMapper.selectByPrimaryKey(id);
+        String content = record.getContent();
+        if(!StringUtils.isEmpty(content)){
+            content = HtmlUtils.htmlUnescape(content);
+        }
+        record.setContent(content);
+        return record;
     }
+
+
+    @Override
+    public int insert(Article record) {
+        String content = record.getContent();
+        if(!StringUtils.isEmpty(content)){
+            content = HtmlUtils.htmlEscape(content);
+        }
+        record.setContent(content);
+
+        int result = getBaseMapper().insert(record);
+        return result;
+    }
+
+    @Override
+    public int insertSelective(Article record) {
+        String content = record.getContent();
+        if(!StringUtils.isEmpty(content)){
+            content = HtmlUtils.htmlEscape(content);
+        }
+        record.setContent(content);
+        int result = getBaseMapper().insertSelective(record);
+        return result;
+    }
+
 }
