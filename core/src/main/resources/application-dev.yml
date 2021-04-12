@@ -76,4 +76,8 @@ logging:
     com:
       hjx:
         webmaker: DEBUG
+
+#上传图片路径
+file:
+  upload: D:\\upload
 #  path: D://logs//
