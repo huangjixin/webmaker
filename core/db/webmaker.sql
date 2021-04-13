@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50625
 File Encoding         : 65001
 
-Date: 2021-04-11 12:35:30
+Date: 2021-04-13 10:04:25
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -35,11 +35,14 @@ CREATE TABLE `article` (
   PRIMARY KEY (`id`),
   KEY `fk_artile_to_chanel` (`channel_id`),
   CONSTRAINT `fk_artile_to_chanel` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of article
 -- ----------------------------
+INSERT INTO `article` VALUES ('1', '1', '1', null, null, null, null, null, null, null, '10', null);
+INSERT INTO `article` VALUES ('2', '2', '1', null, null, null, null, '2021-04-12 01:35:44', null, null, '10', '&lt;p style=&quot;text-align: center;&quot;&gt;&lt;em&gt;qweqewqeqweqweewwwwweweweeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee&lt;/em&gt;&lt;/p&gt;&lt;p style=&quot;text-align: center;&quot;&gt;&lt;em&gt;&lt;/em&gt;&lt;/p&gt;&lt;table border=&quot;1&quot; width=&quot;200&quot; cellspacing=&quot;1&quot; cellpadding=&quot;1&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;wew&lt;/td&gt;&lt;td&gt;ewew&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;ewew&lt;/td&gt;&lt;td&gt;weew&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;ewewe&lt;/td&gt;&lt;td&gt;weeweweweeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;br /&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;div style=&quot;text-align: center;&quot;&gt;&lt;em&gt;ewwewewewe&lt;/em&gt;&lt;/div&gt;&lt;em&gt;&lt;/em&gt;&lt;table border=&quot;1&quot; width=&quot;400&quot; cellspacing=&quot;1&quot; cellpadding=&quot;1&quot; style=&quot;text-align: center;&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=&quot;text-align: center;&quot;&gt;sdfdsfdsf&lt;/td&gt;&lt;td style=&quot;text-align: center;&quot;&gt;dsfdsfds&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;text-align: center;&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;td style=&quot;text-align: center;&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;text-align: center;&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;td style=&quot;text-align: center;&quot;&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;&lt;/p&gt;');
+INSERT INTO `article` VALUES ('3', 'af', null, null, null, null, '2021-04-11 10:13:53', '2021-04-11 10:27:27', null, null, '10', 'aaaaaaaaaaaaa');
 
 -- ----------------------------
 -- Table structure for attachment
@@ -91,7 +94,7 @@ CREATE TABLE `channel` (
   `icon` varchar(50) DEFAULT NULL,
   `path` varchar(50) DEFAULT NULL COMMENT '路径',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of channel
@@ -106,3 +109,4 @@ INSERT INTO `channel` VALUES ('16', '领导介绍', null, null, null, 'leaders',
 INSERT INTO `channel` VALUES ('17', '机构职能', null, null, null, 'jigouzhineng', '2021-04-11 04:32:09', null, null, null, '10', '机构职能', null, '', null, null);
 INSERT INTO `channel` VALUES ('18', '内设机构', null, null, null, 'neishejigou', '2021-04-11 04:32:37', null, null, null, '10', '内设机构', null, '', null, null);
 INSERT INTO `channel` VALUES ('19', '办公地址', null, null, null, 'bangongdizhi', '2021-04-11 04:33:08', null, null, null, '10', '办公地址', null, '', null, null);
+INSERT INTO `channel` VALUES ('20', '123213', null, null, null, '3213123', '2021-04-11 06:05:09', null, null, null, '15', '3213123', null, '21312', null, null);

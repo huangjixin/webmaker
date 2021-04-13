@@ -32,11 +32,39 @@
     <div class="col-md-10">
         <input id="channelId" type="hidden" name="channelId" th:value="${article.channelId}">
         <input id="channelName" name="channelName" readonly th:value="${article.channel.name}">
-        <button id="channelIdSetBtn" class="btn btn-primary" data-toggle="modal" data-target="#channelModal">文章频道
+        <button id="channelIdSetBtn" class="btn btn-primary" type="button" data-toggle="modal" data-target="#channelModal">文章频道
         </button>
     </div>
 </div>
 
+
+<div class="form-group">
+    <label class="col-md-2 control-label" for="content">内容</label>
+    <div class="col-md-10"> <!--xheditor-->
+        <textarea id="content" name="content" class="form-control" rows="24"
+                  data-bv-notempty="true"
+                  data-bv-notempty-message="不能为空"
+                  placeholder="内容编辑"
+                  th:utext="${article.content}">
+        </textarea>
+
+        <span th:if="${#fields.hasErrors('article.content')}" th:errors="${article.content}"></span>
+    </div>
+</div>
+
+<div class="actions form-group">
+    <div class="col-md-2"></div>
+    <div class="col-md-10 form-inline">
+        <button id="submitBtn" type="submit" class="btn btn-success">提交</button>
+        <button id="resetBtn" type="reset" class="btn btn-primary">重置</button>
+        <a th:href="@{/admin/art/article}">
+            <button type="button" class="btn btn-default">
+                <i class="fa fa-arrow-circle-left" aria-hidden="true">&nbsp;返回</i></button>
+        </a>
+    </div>
+</div>
+
+<input id="id" name="id" type="hidden" th:value="${article.id}">
 <!-- 模态框（Modal） -->
 <div class="modal fade" id="channelModal" tabindex="-1" role="dialog" aria-labelledby="menuModalLabel"
      aria-hidden="true">
@@ -57,50 +85,9 @@
     </div><!-- /.modal -->
 </div>
 
-<div class="actions form-group">
-    <div class="col-md-2"></div>
-    <div class="col-md-10 form-inline">
-        <button id="submitBtn" type="submit" class="btn btn-success">提交</button>
-        <button id="resetBtn" type="reset" class="btn btn-primary">重置</button>
-        <a th:href="@{/admin/art/article}">
-            <button type="button" class="btn btn-default">
-                <i class="fa fa-arrow-circle-left" aria-hidden="true">&nbsp;返回</i></button>
-        </a>
-    </div>
-</div>
-
-<div class="form-group">
-    <label class="col-md-2 control-label" for="content">内容</label>
-    <div class="col-md-10"> <!--xheditor-->
-        <textarea id="content" name="content" class="form-control" rows="24"
-                  data-bv-notempty="true"
-                  data-bv-notempty-message="不能为空"
-                  placeholder="内容编辑"
-                  th:utext="${article.content}"
-                  required>
-        </textarea>
-
-        <span th:if="${#fields.hasErrors('article.content')}" th:errors="${article.content}"></span>
-    </div>
-</div>
-
-
-
-<input id="id" name="id" type="hidden" th:value="${article.id}">
-
-
 <script th:inline="javascript">
   var root = [[${#servletContext.contextPath}]];
   var editor;
-
-  function onsubmitHanlder(){
-     if(editor != null && editor != undefined){
-        var cont = editor.getSource();
-        $("#content").val(cont);
-        alert(cont);
-     }
-  }
-
 
   $(function() {
     $("#artHref").trigger("click");
@@ -116,25 +103,22 @@
         //初始化xhEditor编辑器插件
 		editor = $('#content').xheditor({
 			tools : 'full',
-            skin : 'vista',
+            skin : 'default',
             showBlocktag : false,
             internalScript : false,
             internalStyle : false,
             width : 800,
-            height : 200,
+            height : 600,
             fullscreen : false,
             sourceMode : false,
             forcePtag : false,
             html5Upload : false,
-            upLinkUrl : root+"/admin/art/attachment/upload", //带链接文字的附件上传的action
+            upMultiple: 5,
+            upLinkUrl : root+"/admin/art/attachment/upload/", //带链接文字的附件上传的action
             upLinkExt : "zip,rar,txt",//带链接文字的附件的限制格式
             upBtnText : "上传", //图片上传按钮显示
             upImgUrl : root+"/admin/art/attachment/upload", //图片上传的action
             upImgExt : "jpg,jpeg,gif,png",//图片上传的限制格式
-            upFlashUrl : root+"/admin/art/attachment/upload",//动画文件上传的action
-            upFlashExt : "swf",//动画文件的限制格式
-            upMediaUrl : root+"/admin/art/attachment/upload",//多媒体文件上传的action
-            upMediaExt : "wmv,avi,wma,mp3,mid",//多媒体文件的限制格式
 			onUpload : insertUpload
 		});
   }
@@ -143,14 +127,16 @@
   function insertUpload(arrMsg) {
 	  //xheditor返回的arrMsg是一个Object数组
 	  var msg = arrMsg[0];
-
+      //msg = JSON.parse(msg);
 	  //(1)其中url插入到编辑器,这样xheditor才能正常显示图片
-	  var url = msg.url;
+	  //var url = root + msg.url;
+	  var url = root + msg;
+	  //editor.appendHTML('<img src="'+url+'"></img>');
 	   $("#content").append(url);
-			//以下步骤不是必须的
+		  //以下步骤不是必须的
 			//(2)将attachment_id保存到checkbox中，发表文章时根据这些attachment_id去更新图片的post_id
 			//var id = msg.id;
-			//$("#imagesDiv").append("<input type='checkbox' name='attachments' checked='checked' onclick='return false;' value='"+id+"''/><br>");
+			//$("#articleForm").append("<input type='checkbox' name='attachments' checked='checked' onclick='return false;' value='"+id+"''/><br>");
 
 			//(3)图片的名字放到下拉列表,用户从下拉列表 中选择图片做为Post的主题图片
 			//var localname = msg.localname;

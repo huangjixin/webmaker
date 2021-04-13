@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,16 +41,25 @@ public class AttachmentRestController extends BaseController<Attachment> {
 
 
     @PostMapping("upload")
-    public JSONObject upload(HttpServletRequest request,
+    public JSONObject upload(MultipartFile[] files, HttpServletRequest request,
                              HttpServletResponse response) throws IOException {
+
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("err","");
-        jsonObject.put("msg","");
+        jsonObject.put("err", "");
+        String msg = "";
 
         String currentUser = "test";
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         String day = sdf.format(new Date());
         String fileUploadPath = fileUpload + File.separator + currentUser + File.separator + day;
+        String classPath = ClassUtils.getDefaultClassLoader().getResource("").getPath();
+        File upload = new File(classPath, "static/upload/images/" + currentUser);
+        String url = "/upload/images/" + currentUser;
+
+        if (!upload.exists()) {
+            upload.mkdirs();
+        }
+
         File path = new File(fileUploadPath);
         if (!path.exists()) {
             path.mkdirs();
@@ -68,14 +78,28 @@ public class AttachmentRestController extends BaseController<Attachment> {
             Date d = new Date();
             String newFileName = df.format(d) + "_"
                     + r.nextInt(100000) + "." + fileExt;
+            url += "/" + newFileName;
+
             // 是image则进入此处开始执行
             if (fileExt.equals("jpg") || fileExt.equals("png")) {
-                FileOutputStream fos = new FileOutputStream(new File(path.getPath(), newFileName));
+                FileOutputStream fos = new FileOutputStream(new File(upload.getPath(), newFileName));
                 IOUtils.copy(mf.getInputStream(), fos);
 
                 fos.close();
             }
+
+            Attachment attachment = new Attachment();
+            attachment.setCreatedBy(currentUser);
+            attachment.setCreatedTime(new Date());
+            attachment.setName(newFileName);
+            attachment.setUrl(url);
+            attachment.setPath(upload.getPath() + File.separator + newFileName);
+            attachmentService.insertSelective(attachment);
+            msg = JSONObject.toJSONString(attachment);
+            msg = url;
         }
+
+        jsonObject.put("msg", msg);
 
         return jsonObject;
     }
