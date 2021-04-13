@@ -87,6 +87,6 @@ public class ArticleController extends BaseController<Article> {
         articleDto.setContent(content);
         int result = this.articleService.updateByPrimaryKeySelective(articleDto);
         uiModel.addAttribute("article", articleDto);
-        return  prefix + "/edit/";
+        return  "redirect:/" + prefix + "/edit/"+id;
     }
 }

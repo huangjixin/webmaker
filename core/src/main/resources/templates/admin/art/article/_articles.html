@@ -136,16 +136,21 @@
           checkbox:true  //第一列显示复选框
         },
         {
-          title: '真实姓名',
-          field: 'realName',
-          sortName:'real_name',
+          title: '文章名称',
+          field: 'name',
+          sortName:'name',
           align: 'center',
-          sortable: true
+          sortable: true,
+          formatter: function (value, row, index) {
+            return '<a href="'+root+'/admin/art/article/edit/'+row.id+'">' +
+                  row.name +
+                  '</a>';
+          }
         },
         {
-          title: '登录名',
-          field: 'loginName',
-          sortName:'login_name',
+          title: '文章标题',
+          field: 'title',
+          sortName:'title',
           align: 'center',
           sortable: true
         },

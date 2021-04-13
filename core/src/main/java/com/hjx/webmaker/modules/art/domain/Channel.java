@@ -1,5 +1,6 @@
 package com.hjx.webmaker.modules.art.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hjx.webmaker.modules.base.domain.State;
 import com.hjx.webmaker.modules.base.utils.vo.Node;
 
@@ -48,11 +49,13 @@ public class Channel extends Node implements Serializable {
     /**
      * 
      */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="Asia/Beijing")
     private Date createdTime;
 
     /**
      * 
      */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="Asia/Beijing")
     private Date updateTime;
 
     /**

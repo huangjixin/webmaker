@@ -1,5 +1,7 @@
 package com.hjx.webmaker.modules.art.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -43,11 +45,13 @@ public class Attachment implements Serializable {
     /**
      * 
      */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="Asia/Beijing")
     private Date createdTime;
 
     /**
      * 
      */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="Asia/Beijing")
     private Date updateTime;
 
     /**
