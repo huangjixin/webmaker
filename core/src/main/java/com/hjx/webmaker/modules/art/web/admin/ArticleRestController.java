@@ -1,10 +1,10 @@
 package com.hjx.webmaker.modules.art.web.admin;
 
+import com.hjx.webmaker.modules.art.domain.Article;
 import com.hjx.webmaker.modules.art.domain.ArticleCriteria;
+import com.hjx.webmaker.modules.art.service.IArticleService;
 import com.hjx.webmaker.modules.base.dto.DataGridDto;
 import com.hjx.webmaker.modules.base.web.BaseRestController;
-import com.hjx.webmaker.modules.art.domain.Article;
-import com.hjx.webmaker.modules.art.service.IArticleService;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,6 +68,10 @@ public class ArticleRestController extends BaseRestController<Article> {
             String name = request.getParameter("name");
             if (!StringUtils.isEmpty(name)) {
                 criteria.andNameLike("%" + name + "%");
+            }
+            String channelId = request.getParameter("channelId");
+            if (!StringUtils.isEmpty(channelId)) {
+                criteria.andChannelIdEqualTo(Long.valueOf(channelId));
             }
 
             String sort = request.getParameter("sort");
