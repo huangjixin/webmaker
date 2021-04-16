@@ -67,6 +67,7 @@ public class AttachmentRestController extends BaseController<Attachment> {
 
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
+
         for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
             MultipartFile mf = entity.getValue();
             String originalFileName = mf.getOriginalFilename();
@@ -95,8 +96,8 @@ public class AttachmentRestController extends BaseController<Attachment> {
             attachment.setUrl(url);
             attachment.setPath(upload.getPath() + File.separator + newFileName);
             attachmentService.insertSelective(attachment);
-            msg = JSONObject.toJSONString(attachment);
-            msg = url;
+//            msg = JSONObject.toJSONString(attachment);
+            msg = url+"?id="+attachment.getId();
         }
 
         jsonObject.put("msg", msg);

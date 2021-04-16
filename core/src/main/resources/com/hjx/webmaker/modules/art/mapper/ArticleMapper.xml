@@ -34,6 +34,23 @@
       <result column="channel_icon" jdbcType="VARCHAR" property="icon" />
       <result column="channel_path" jdbcType="VARCHAR" property="path" />
     </association>
+    <collection property="attachments"
+                ofType="com.hjx.webmaker.modules.art.domain.Attachment">
+      <id column="attachment_id" jdbcType="BIGINT" property="id" />
+      <result column="attachment_name" jdbcType="VARCHAR" property="name" />
+      <result column="attachment_status" jdbcType="INTEGER" property="status" />
+      <result column="attachment_decription" jdbcType="VARCHAR" property="decription" />
+      <result column="attachment_type" jdbcType="VARCHAR" property="type" />
+      <result column="attachment_en_name" jdbcType="VARCHAR" property="enName" />
+      <result column="attachment_created_time" jdbcType="TIMESTAMP" property="createdTime" />
+      <result column="attachment_update_time" jdbcType="TIMESTAMP" property="updateTime" />
+      <result column="attachment_created_by" jdbcType="VARCHAR" property="createdBy" />
+      <result column="attachment_update_by" jdbcType="VARCHAR" property="updateBy" />
+      <result column="attachment_url" jdbcType="VARCHAR" property="url" />
+      <result column="attachment_icon" jdbcType="VARCHAR" property="icon" />
+      <result column="attachment_path" jdbcType="VARCHAR" property="path" />
+      <result column="attachment_article_id" jdbcType="BIGINT" property="articleId" />
+    </collection>
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -120,6 +137,22 @@
     channel.icon as channel_icon,
     channel.path as channel_path
   </sql>
+  <sql id="Article_Column_List" >
+    attachment.id as attachment_id ,
+    attachment.name as attachment_name,
+    attachment.status as attachment_status,
+    attachment.decription as attachment_decription,
+    attachment.type as attachment_type,
+    attachment.en_name as attachment_en_name,
+    attachment.created_time as attachment_created_time,
+    attachment.update_time as attachment_update_time,
+    attachment.created_by as attachment_created_by,
+    attachment.update_by as attachment_update_by,
+    attachment.url as attachment_url,
+    attachment.icon as attachment_icon,
+    attachment.path as attachment_path,
+    attachment.article_id as attachment_article_id
+  </sql>
   <select id="selectByExampleWithBLOBs" parameterType="com.hjx.webmaker.modules.art.domain.ArticleCriteria" resultMap="ResultMapWithBLOBs">
     select
     <if test="distinct">
@@ -163,7 +196,10 @@
     <include refid="Blob_Column_List" />
     ,
     <include refid="Channel_Column_List" />
+    ,
+    <include refid="Article_Column_List" />
     from article left join channel on article.channel_id = channel.id
+    left join attachment on attachment.article_id = article.id
     where article.id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">

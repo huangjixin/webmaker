@@ -84,6 +84,9 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>
+<input type="hidden" data-th-each="attachment,attachmentStat: ${article.attachments}"
+       th:id="${'attachment_id'+ attachment.id}" th:name="${'attachments['+attachmentStat.index+'].id'}"
+       th:value="${attachment.id}">
 
 <script th:inline="javascript">
   var root = [[${#servletContext.contextPath}]];
@@ -127,12 +130,17 @@
   function insertUpload(arrMsg) {
 	  //xheditor返回的arrMsg是一个Object数组
 	  var msg = arrMsg[0];
+	  var url = root + msg;
+	  var n1 = url.length; //地址的总长度
+      var n2 = url.indexOf("="); //取得=号的位置
+      var id = decodeURI(url.substr(n2 + 1, n1 - n2)); //从=号后面的内容
+      console.log(id);
       //msg = JSON.parse(msg);
 	  //(1)其中url插入到编辑器,这样xheditor才能正常显示图片
-	  //var url = root + msg.url;
-	  var url = root + msg;
+	  // var url = root + msg.url;
+	  //var url = root + msg;
 	  //editor.appendHTML('<img src="'+url+'"></img>');
-	   $("#content").append(url);
+	  // $("#content").append(url);
 		  //以下步骤不是必须的
 			//(2)将attachment_id保存到checkbox中，发表文章时根据这些attachment_id去更新图片的post_id
 			//var id = msg.id;
@@ -143,6 +151,18 @@
 			//var urlWithoutHttp = url.substring(url.indexOf("/upload")+1);
 			//$("#topicImageUrl").append("<option value='"+urlWithoutHttp+"'>" + localname + "</option>");
   }
+
+    //获取url中的参数
+    //name-查询的变量名
+    function getUrlParam(str,name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var r = str.substr(1).match(reg); //匹配目标参数
+        if (r != null)
+        {
+            return decodeURIComponent(r[2]);
+        }
+        return null; //返回参数值
+    }
 
   //验证表单。
   function validateFields(){
