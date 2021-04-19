@@ -53,8 +53,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/**")
 //                .permitAll();
         http.csrf().disable()
-                .authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/oauth/token", "/oauth/check_token", "/**").permitAll().and().authorizeRequests()
-                .antMatchers("/**").permitAll();
+                .authorizeRequests().antMatchers("/admin/**").authenticated()
+                .and()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS, "/oauth/token", "/oauth/check_token", "/swagger-ui.html", "/swagger-resources/**",
+                        "/v2/api-docs", "/**").permitAll();
         // 放行的请求
                 /*.antMatchers(
                         "/login/**",

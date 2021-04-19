@@ -131,7 +131,8 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.hjx.webmaker.modules.sys.domain.UserRoleCriteria" resultType="java.lang.Long">
+
+    <select id="countByExample" parameterType="com.hjx.webmaker.modules.sys.domain.UserRoleCriteria" resultType="java.lang.Long">
     select count(*) from sys_user_role
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -181,4 +182,12 @@
       ROLE_ID = #{roleId,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=VARCHAR}
   </update>
+
+  <insert id="insertBatch">
+    INSERT INTO sys_user_role(id,user_id,role_id)
+    VALUES
+    <foreach collection="userRoles" item="userRole" separator=",">
+      (#{userRole.id},#{userRole.userId},#{userRole.roleId})
+    </foreach>
+  </insert>
 </mapper>

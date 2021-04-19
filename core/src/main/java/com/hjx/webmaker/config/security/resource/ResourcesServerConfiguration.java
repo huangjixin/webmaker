@@ -38,7 +38,10 @@ public class ResourcesServerConfiguration extends ResourceServerConfigurerAdapte
 //                .permitAll();
 
         http.csrf().disable()
-                .authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/oauth/token", "/**").permitAll().and().authorizeRequests()
+                .authorizeRequests().antMatchers("/admin/**").authenticated()
+                .and()
+                .authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/oauth/token", "/login", "/**").permitAll()
+                .and().authorizeRequests()
                 .antMatchers("/**").permitAll();
     }
 

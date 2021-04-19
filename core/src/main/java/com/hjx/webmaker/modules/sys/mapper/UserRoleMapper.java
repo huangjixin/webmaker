@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface UserRoleMapper  extends BaseMapper<UserRole> {
+    int insertBatch(@Param("userRoles") List<UserRole> userRoles);
     /*long countByExample(UserRoleCriteria example);
 
     int deleteByExample(UserRoleCriteria example);

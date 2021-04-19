@@ -11,4 +11,18 @@ public interface IUserService extends IBaseService<User> {
      * @return
      */
     UserDto selectByUserName(String loginName);
+
+    /**
+     * 新增用户
+     * @param record
+     * @return
+     */
+    int insert(UserDto record);
+
+    /**
+     * 更新用户
+     * @param record
+     * @return
+     */
+    int update(UserDto record);
 }
