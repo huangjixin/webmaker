@@ -19,7 +19,9 @@
                 </ul>
                 <div>
                     <h3 class="page-header">文章信息</h3>
-                    <form id="articleForm" class="form-horizontal" th:action="@{/admin/art/article}" accept-charset="UTF-8" method="post" style="max-width: 600px;">
+                    <!--th:object="${article}" 数据绑定-->
+                    <form id="articleForm" class="form-horizontal" th:action="@{/admin/art/article}"
+                          accept-charset="UTF-8" method="post" style="max-width: 600px;">
                         <div th:include="admin/art/article/_form::form_article"></div>
                     </form>
                 </div>

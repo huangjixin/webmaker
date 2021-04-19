@@ -75,17 +75,17 @@ public class ArticleController extends BaseController<Article> {
         return "redirect:/" + prefix + "/create";
     }
 
+
     @PostMapping("edit/{id}")
     public String edit(Model uiModel, @PathVariable("id") Long id, ArticleDto articleDto, HttpServletRequest request, HttpServletResponse response) {
         ArticleDto chan = this.articleService.selectByPrimaryKey(id);
 
-        articleDto.setUpdateTime(new Date());
-        String content = articleDto.getContent();
+        /*String content = articleDto.getContent();
         if (!StringUtils.isEmpty(content)) {
             content = HtmlUtils.htmlEscape(content);
         }
-        articleDto.setContent(content);
-        int result = this.articleService.updateByPrimaryKeySelective(articleDto);
+        articleDto.setContent(content);*/
+        int result = this.articleService.updateByPrimaryKeyWithBLOBs(articleDto);
         uiModel.addAttribute("article", articleDto);
         return  "redirect:/" + prefix + "/edit/"+id;
     }
