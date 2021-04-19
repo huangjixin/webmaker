@@ -23,7 +23,7 @@ public class UserDto extends User
 
     private List<Permission> permissions = new ArrayList<Permission>();
 
-    private List<Permission> treePermissions = new ArrayList<Permission>();
+    private List treePermissions = new ArrayList();
 
 
     public void setRoleIdsByRoles() {
@@ -57,11 +57,11 @@ public class UserDto extends User
         this.permissions = permissions;
     }
 
-    public List<Permission> getTreePermissions() {
+    public List getTreePermissions() {
         return treePermissions;
     }
 
-    public void setTreePermissions(List<Permission> treePermissions) {
+    public void setTreePermissions(List treePermissions) {
         this.treePermissions = treePermissions;
     }
 

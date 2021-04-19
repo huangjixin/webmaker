@@ -3,6 +3,7 @@ package com.hjx.webmaker.modules.sys.service.impl;
 import com.hjx.webmaker.modules.base.mapper.BaseMapper;
 import com.hjx.webmaker.modules.base.service.impl.BaseServiceImpl;
 import com.hjx.webmaker.modules.base.utils.TreeHelper;
+import com.hjx.webmaker.modules.base.utils.vo.Node;
 import com.hjx.webmaker.modules.sys.domain.Permission;
 import com.hjx.webmaker.modules.sys.domain.User;
 import com.hjx.webmaker.modules.sys.dto.UserDto;
@@ -69,7 +70,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
         UserDto user = this.selectByUserName(username);
         List<Permission> permissions = user.getPermissions();
         if (permissions != null && permissions.size() > 0) {
-            List<Permission> list = Collections.singletonList((Permission) TreeHelper.getTreeNodes(permissions));
+            List<Node> list =  TreeHelper.getTreeNodes(permissions);
             user.setTreePermissions(list);
         }
         logger.info("认证结束，结果为：{}", user == null ? "查不到结果" : user.toString());
