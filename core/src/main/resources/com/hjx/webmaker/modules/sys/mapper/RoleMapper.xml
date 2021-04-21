@@ -5,15 +5,36 @@
     <id column="ID" jdbcType="VARCHAR" property="id" />
     <result column="NAME" jdbcType="VARCHAR" property="name" />
     <result column="IS_EXPIRED" jdbcType="TINYINT" property="isExpired" />
-    <result column="IS_LOCKED" jdbcType="TINYINT" property="isLocked" />
-    <result column="IS_ENABLED" jdbcType="TINYINT" property="isEnabled" />
-    <result column="TYPE" jdbcType="INTEGER" property="type" />
-    <result column="STATUS" jdbcType="INTEGER" property="status" />
-    <result column="CREATE_BY" jdbcType="VARCHAR" property="createBy" />
-    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="UPDATE_BY" jdbcType="VARCHAR" property="updateBy" />
-    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="EN_NAME" jdbcType="VARCHAR" property="enName" />
+    <result column="IS_LOCKED" jdbcType="TINYINT" property="isLocked"/>
+    <result column="IS_ENABLED" jdbcType="TINYINT" property="isEnabled"/>
+    <result column="TYPE" jdbcType="INTEGER" property="type"/>
+    <result column="STATUS" jdbcType="INTEGER" property="status"/>
+    <result column="CREATE_BY" jdbcType="VARCHAR" property="createBy"/>
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime"/>
+    <result column="UPDATE_BY" jdbcType="VARCHAR" property="updateBy"/>
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime"/>
+    <result column="EN_NAME" jdbcType="VARCHAR" property="enName"/>
+  </resultMap>
+  <resultMap id="RoleDtoMap" type="com.hjx.webmaker.modules.sys.dto.RoleDto" extends="BaseResultMap">
+    <collection property="permissions"
+                ofType="com.hjx.webmaker.modules.sys.domain.Permission">
+      <id column="PERMISSION_ID" jdbcType="VARCHAR" property="id"/>
+      <result column="PERMISSION_NAME" jdbcType="VARCHAR" property="name"/>
+      <result column="PERMISSION_IS_EXPIRED" jdbcType="TINYINT" property="isExpired"/>
+      <result column="PERMISSION_IS_LOCKED" jdbcType="TINYINT" property="isLocked"/>
+      <result column="PERMISSION_IS_ENABLED" jdbcType="TINYINT" property="isEnabled"/>
+      <result column="PERMISSION_TYPE" jdbcType="INTEGER" property="type"/>
+      <result column="PERMISSION_STATUS" jdbcType="INTEGER" property="status"/>
+      <result column="PERMISSION_CREATE_BY" jdbcType="VARCHAR" property="createBy"/>
+      <result column="PERMISSION_CREATE_TIME" jdbcType="TIMESTAMP" property="createTime"/>
+      <result column="PERMISSION_UPDATE_BY" jdbcType="VARCHAR" property="updateBy"/>
+      <result column="PERMISSION_UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime"/>
+      <result column="PERMISSION_EN_NAME" jdbcType="VARCHAR" property="enName"/>
+      <result column="PERMISSION_PARENT_ID" jdbcType="VARCHAR" property="parentId"/>
+      <result column="PERMISSION_CODE" jdbcType="VARCHAR" property="code"/>
+      <result column="PERMISSION_IS_MENU" jdbcType="TINYINT" property="isExpired"/>
+      <result column="PERMISSION_URL" jdbcType="VARCHAR" property="code"/>
+    </collection>
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -77,6 +98,7 @@
     ID, NAME, IS_EXPIRED, IS_LOCKED, IS_ENABLED, TYPE, STATUS, CREATE_BY, CREATE_TIME, 
     UPDATE_BY, UPDATE_TIME, EN_NAME
   </sql>
+
   <select id="selectByExample" parameterType="com.hjx.webmaker.modules.sys.domain.RoleCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -201,12 +223,14 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.hjx.webmaker.modules.sys.domain.RoleCriteria" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.hjx.webmaker.modules.sys.domain.RoleCriteria"
+          resultType="java.lang.Long">
     select count(*) from sys_role
     <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
+      <include refid="Example_Where_Clause"/>
     </if>
   </select>
+
   <update id="updateByExampleSelective" parameterType="map">
     update sys_role
     <set>
@@ -313,14 +337,68 @@
     set NAME = #{name,jdbcType=VARCHAR},
       IS_EXPIRED = #{isExpired,jdbcType=TINYINT},
       IS_LOCKED = #{isLocked,jdbcType=TINYINT},
-      IS_ENABLED = #{isEnabled,jdbcType=TINYINT},
-      TYPE = #{type,jdbcType=INTEGER},
-      STATUS = #{status,jdbcType=INTEGER},
-      CREATE_BY = #{createBy,jdbcType=VARCHAR},
-      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
-      UPDATE_BY = #{updateBy,jdbcType=VARCHAR},
-      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
-      EN_NAME = #{enName,jdbcType=VARCHAR}
+    IS_ENABLED = #{isEnabled,jdbcType=TINYINT},
+    TYPE = #{type,jdbcType=INTEGER},
+    STATUS = #{status,jdbcType=INTEGER},
+    CREATE_BY = #{createBy,jdbcType=VARCHAR},
+    CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+    UPDATE_BY = #{updateBy,jdbcType=VARCHAR},
+    UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+    EN_NAME = #{enName,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=VARCHAR}
   </update>
+
+  <select id="selectByPrimaryKeyWithPermissions" resultMap="RoleDtoMap">
+    SELECT
+    a.*,
+    e.ID AS PERMISSION_ID,
+    e. NAME AS PERMISSION_NAME,
+    e.IS_EXPIRED AS PERMISSION_IS_EXPIRED,
+    e.IS_LOCKED AS PERMISSION_IS_LOCKED,
+    e.IS_ENABLED AS PERMISSION_IS_ENABLED,
+    e.TYPE AS PERMISSION_TYPE,
+    e.STATUS AS PERMISSION_STATUS,
+    e.CREATE_BY AS PERMISSION_CREATE_BY,
+    e.CREATE_TIME AS PERMISSION_CREATE_TIME,
+    e.UPDATE_BY AS PERMISSION_UPDATE_BY,
+    e.UPDATE_TIME AS PERMISSION_UPDATE_TIME,
+    e.EN_NAME AS PERMISSION_EN_NAME,
+    e.PARENT_ID AS PERMISSION_PARENT_ID,
+    e.CODE AS PERMISSION_CODE,
+    e.IS_MENU AS PERMISSION_IS_MENU,
+    e.URL AS PERMISSION_URL
+    FROM
+    sys_role AS a
+    LEFT JOIN sys_role_permission AS d ON a.ID = d.ROLE_ID
+    LEFT JOIN sys_permission AS e ON d.PERMISSION_ID = e.ID
+    WHERE
+    a.id = #{id}
+
+    union
+
+    SELECT
+    a.*,
+    e.ID AS PERMISSION_ID,
+    e. NAME AS PERMISSION_NAME,
+    e.IS_EXPIRED AS PERMISSION_IS_EXPIRED,
+    e.IS_LOCKED AS PERMISSION_IS_LOCKED,
+    e.IS_ENABLED AS PERMISSION_IS_ENABLED,
+    e.TYPE AS PERMISSION_TYPE,
+    e.STATUS AS PERMISSION_STATUS,
+    e.CREATE_BY AS PERMISSION_CREATE_BY,
+    e.CREATE_TIME AS PERMISSION_CREATE_TIME,
+    e.UPDATE_BY AS PERMISSION_UPDATE_BY,
+    e.UPDATE_TIME AS PERMISSION_UPDATE_TIME,
+    e.EN_NAME AS PERMISSION_EN_NAME,
+    e.PARENT_ID AS PERMISSION_PARENT_ID,
+    e.CODE AS PERMISSION_CODE,
+    e.IS_MENU AS PERMISSION_IS_MENU,
+    e.URL AS PERMISSION_URL
+    FROM
+    sys_role AS a
+    LEFT JOIN sys_role_permission AS d ON a.ID = d.ROLE_ID
+    LEFT JOIN sys_permission AS e ON d.PERMISSION_ID = e.ID
+    WHERE
+    a.name = #{id}
+  </select>
 </mapper>

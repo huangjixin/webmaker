@@ -2,8 +2,17 @@ package com.hjx.webmaker.modules.sys.mapper;
 
 import com.hjx.webmaker.modules.base.mapper.BaseMapper;
 import com.hjx.webmaker.modules.sys.domain.Role;
+import com.hjx.webmaker.modules.sys.dto.RoleDto;
 
 public interface RoleMapper extends BaseMapper<Role> {
+
+    /**
+     * 根据ID查询带有权限的角色。
+     * @param roleId
+     * @return
+     */
+    RoleDto selectByPrimaryKeyWithPermissions(String roleId);
+
     /*long countByExample(RoleCriteria example);
 
     int deleteByExample(RoleCriteria example);

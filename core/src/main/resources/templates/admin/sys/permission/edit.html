@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout/admin/_application_layout">
+<div layout:fragment="title">
+    <title>权限管理-权限编辑</title>
+</div>
+
+<div layout:fragment="content">
+    <div th:include="admin/shared/_header::header"></div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+                <div th:include="admin/shared/_sidebar::sidebar('权限管理')"></div>
+            </div>
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                <ul class="breadcrumb">
+                    <li><a th:href="@{/admin/}">首页</a></li>
+                    <li><a th:href="@{/admin/sys/permission}">权限管理</a></li>
+                    <li><a href="#">权限编辑</a></li>
+                </ul>
+                <h3 class="page-header">权限信息</h3>
+                <form id="permissionForm" class="form-horizontal"
+                      th:action="@{'/admin/sys/permission/edit/'+ ${permission.id}}"
+                      accept-charset="UTF-8" method="POST" style="max-width: 600px;">
+                    <input id="id" type="hidden" th:value="${permission.id}">
+                    <div th:include="admin/sys/permission/_form::form_permission"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $("#codesys").trigger("click");
+        });
+
+
+    </script>
+</div>
+</html>

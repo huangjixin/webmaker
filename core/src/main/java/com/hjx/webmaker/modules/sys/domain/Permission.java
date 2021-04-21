@@ -1,6 +1,7 @@
 package com.hjx.webmaker.modules.sys.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.hjx.webmaker.modules.base.domain.State;
 import com.hjx.webmaker.modules.base.utils.vo.Node;
 
 import java.io.Serializable;
@@ -95,6 +96,15 @@ public class Permission  extends Node implements Serializable {
      */
     private String url;
 
+    private State state = new State();
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
     private static final long serialVersionUID = 1L;
 
     @Override
