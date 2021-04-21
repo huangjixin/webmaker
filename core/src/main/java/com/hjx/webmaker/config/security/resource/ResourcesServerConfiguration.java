@@ -31,18 +31,18 @@ public class ResourcesServerConfiguration extends ResourceServerConfigurerAdapte
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-//        http.csrf()
-//                .disable()
-//                .authorizeRequests()
-//                .antMatchers("/**")
-//                .permitAll();
+        http.csrf()
+                .disable()
+                .authorizeRequests()
+                .antMatchers("/**")
+                .permitAll();
 
-        http.csrf().disable()
+        /*http.csrf().disable()
                 .authorizeRequests().antMatchers("/admin/**").authenticated()
                 .and()
-                .authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/oauth/token", "/login", "/**").permitAll()
+                .authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/oauth/token", "/admin/login", "/**").permitAll()
                 .and().authorizeRequests()
-                .antMatchers("/**").permitAll();
+                .antMatchers("/**").permitAll();*/
     }
 
     /* 资源服务器安全属性配置，与AuthorizationServer授权服务器匹配 */

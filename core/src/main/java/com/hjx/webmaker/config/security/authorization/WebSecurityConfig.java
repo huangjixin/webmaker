@@ -47,17 +47,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     /* http自定义配置 */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http.csrf()
-//                .disable()
-//                .authorizeRequests()
-//                .antMatchers("/**")
-//                .permitAll();
-        http.csrf().disable()
+        http.csrf()
+                .disable()
+                .authorizeRequests()
+                .antMatchers("/**")
+                .permitAll();
+        /*http.csrf().disable()
                 .authorizeRequests().antMatchers("/admin/**").authenticated()
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/oauth/token", "/oauth/check_token", "/swagger-ui.html", "/swagger-resources/**",
-                        "/v2/api-docs", "/**").permitAll();
+                        "/v2/api-docs", "/**").permitAll();*/
         // 放行的请求
                 /*.antMatchers(
                         "/login/**",
