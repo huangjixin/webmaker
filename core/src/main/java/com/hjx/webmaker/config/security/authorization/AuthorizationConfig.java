@@ -150,4 +150,5 @@ public class AuthorizationConfig extends AuthorizationServerConfigurerAdapter {
                 .allowFormAuthenticationForClients();
 //        oauthServer.allowFormAuthenticationForClients();
     }
+
 }
