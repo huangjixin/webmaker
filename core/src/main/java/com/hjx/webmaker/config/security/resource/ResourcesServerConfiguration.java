@@ -12,6 +12,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
@@ -31,18 +33,29 @@ public class ResourcesServerConfiguration extends ResourceServerConfigurerAdapte
     @Qualifier(value = "userService")
     IUserService userServiceDetail;
 
+    @Autowired
+    AuthenticationFailureHandler authenticationFailureHandler;
+
+    @Autowired
+    AuthenticationSuccessHandler authenticationSuccessHandler;
+
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable();
 
-        http.authorizeRequests()
-                .antMatchers("/css/**","/js/**","/fonts/**","/index").permitAll()//都可以访问
-                .antMatchers("//**").hasRole("ADMIN")//需要相应的角色才能访问
+        /*http.authorizeRequests()
+                .antMatchers("/admin/css/**","/admin/images/**","/admin/js/**","/fonts/**","/admin/login","/login").permitAll()//都可以访问
+                .and()
+                .authorizeRequests()
+                .antMatchers("/**").authenticated()//需要相应的角色才能访问
                 .and()
                 .formLogin()//基于Form表单登录验证
-                .loginPage("/login")
-                .successForwardUrl("/admin/index")
-                .failureUrl("/login-error");//自定义登录界面
+                .loginPage("/admin/login")
+                .failureHandler(authenticationFailureHandler)
+                .successHandler(authenticationSuccessHandler);*/
+//                .loginProcessingUrl()
+//                .successForwardUrl("/index")
+//                .failureUrl("/login-error");//自定义登录界面
 
         /*http
                 //使用form表单post方式进行登录
@@ -75,11 +88,11 @@ public class ResourcesServerConfiguration extends ResourceServerConfigurerAdapte
         //
         http.addFilterBefore(filter, CsrfFilter.class);*/
 
-        /*http.csrf()
+        http.csrf()
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/**")
-                .permitAll();*/
+                .permitAll();
         /*http
                 // Since we want the protected resources to be accessible in the UI as well we need
                 // session creation to be allowed (it's disabled by default in 2.0.6)

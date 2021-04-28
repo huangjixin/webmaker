@@ -35,7 +35,7 @@
 <body>
 <div class="container">
     <form class="form-signin" th:action="@{/login}" accept-charset="UTF-8" method="post">
-
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
         <div class="form-group">
             <div class="col-md-12" style="text-align:center;margin-bottom:5px;">
                 <!--<img src="/ccb.jpg" style="width:80px;height:80px;">-->

@@ -1,11 +1,15 @@
 package com.hjx.webmaker.modules.sys.web.admin;
 
 import com.hjx.webmaker.modules.sys.dto.LoginUser;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("admin")
 public class MainController {
  
     @GetMapping("/")
@@ -15,6 +19,7 @@ public class MainController {
  
     @GetMapping("/index")
     public String index() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return "/admin/index";
     }
  
