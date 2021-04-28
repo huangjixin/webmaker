@@ -1,0 +1,192 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<body th:fragment="form_role">
+<link rel="stylesheet" th:href="@{/js/bootstrapValidator.min.css}">
+<link rel="stylesheet" th:href="@{/js/bootstrap-treeview.min.css}">
+<!--<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap-table/1.15.4/bootstrap-table.min.css">-->
+<script th:src="@{/js/bootstrapValidator.min.js}"></script>
+<script th:src="@{/js/bootstrapValidator_zh_CN.min.js}"></script>
+<script th:src="@{/js/bootstrap-treeview.min.js}"></script>
+
+<!--<link href="https://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css" rel="stylesheet">
+<link href="https://cdn.bootcss.com/bootstrap-treeview/1.2.0/bootstrap-treeview.min.css" rel="stylesheet">
+
+<script src="https://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.3/js/bootstrapValidator.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.3/js/language/zh_CN.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js"></script>-->
+
+<div class="form-group">
+    <label class="col-md-2 control-label" for="name">名称</label>
+    <div class="col-md-10">
+        <input id="name" name="name" class="form-control" data-bv-notempty="true" data-bv-notempty-message="不能为空"
+               placeholder="名称" th:value="${role.name}" required>
+        <span th:if="${#fields.hasErrors('role.name')}" th:errors="${role.name}"></span>
+    </div>
+
+</div>
+
+<div class="form-group">
+    <label class="col-md-2 control-label" for="code">角色表达式</label>
+    <div class="col-md-10">
+        <input id="code" type="text" name="code" class="form-control" placeholder="角色表达式" th:value="${role.code}">
+        <span th:if="${#fields.hasErrors('role.code')}" th:errors="${role.code}"></span>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2 control-label" for="code">是否为菜单</label>
+    <div class="col-md-10">
+        <input type="radio" name="isMenu" value="1" th:attr="checked=${role.isMenu==1?true:false}">&nbsp;是
+        <input type="radio" name="isMenu" value="0" th:attr="checked=${role.isMenu==0?true:false}">&nbsp;否
+       <!-- <input id="roleIds" type="checkbox" name="roleIds" th:each="role:${roles}"
+               th:value="${role.id}"
+               th:text="${role.name+'&nbsp;&nbsp;&nbsp;&nbsp;'}"
+               th:attr="checked=${user.roleIds.contains(role.id)?true:false}">
+
+        <input id="isMenu" type="text" name="isMenu" class="form-control" placeholder="角色表达式" th:value="${role.isMenu}">-->
+        <span th:if="${#fields.hasErrors('role.isMenu')}" th:errors="${role.isMenu}"></span>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2 control-label" for="code">URL连接</label>
+    <div class="col-md-10">
+        <input id="url" type="text" name="url" class="form-control" placeholder="URL连接" th:value="${role.url}">
+        <span th:if="${#fields.hasErrors('role.url')}" th:errors="${role.url}"></span>
+    </div>
+</div>
+
+
+<!--<div class="form-group">
+    <label class="col-md-2 control-label" for="menuTreeSetBtn">关联菜单</label>
+    <div class="col-md-10">
+        <input id="menuId" type="hidden" name="menuId" th:value="${role.menuId}">
+        <button id="menuTreeSetBtn" class="btn btn-primary" data-toggle="modal" data-target="#menuModal">设置菜单</button>
+    </div>
+</div>-->
+
+<div class="actions form-group">
+    <label class="col-md-2 control-label"></label>
+    <div th:text="${#request.getAttribute('msg')}"  class="col-md-10" style="color:red;"></div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2 control-label" for="treeview">资源权限</label>
+    <div class="col-md-10">
+        <input id="parentId" name="parentId" type="hidden" th:value="${role.parentId}">
+        <div id="treeview"></div>
+    </div>
+</div>
+
+<div class="actions form-group">
+    <div class="col-md-2"></div>
+    <div class="col-md-10 form-inline">
+        <button id="submitBtn" type="submit" onsubmit="submitHanlder()" class="btn btn-success">提交</button>
+        <button id="resetBtn" type="reset" class="btn btn-primary">重置</button>
+        <a th:href="@{/admin/sys/role}">
+            <button type="button" class="btn btn-default">
+                <i class="fa fa-arrow-circle-left" aria-hidden="true">&nbsp;返回</i></button>
+        </a>
+    </div>
+</div>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="menuModal" tabindex="-1" role="dialog" aria-labelledby="menuModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="menuModalLabel">菜单配置</h4>
+            </div>
+            <div class="modal-body">
+                <div id="menuTreeview"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <!--<button type="button" class="btn btn-primary">确定</button>-->
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<script th:inline="javascript">
+    var root = [[${ #servletContext.contextPath }]];
+    var selecedNode;
+
+    //验证表单。
+    function validateFields(){
+      $('#roleForm').bootstrapValidator({
+        //live: 'enabled', //enabled代表当表单控件内容发生变化时就触发验证，默认提交时验证，
+        // 默认的提示消息
+        message: '该值验证不通过',
+        // 表单框里右侧的icon
+        feedbackIcons: {
+          valid: 'glyphicon glyphicon-ok',
+          invalid: 'glyphicon glyphicon-remove',
+          validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+          name: {
+            message: '名称验证失败',
+            validators: {
+              notEmpty: {
+                message: '名称不能为空'
+              },
+              stringLength: { //长度限制
+                min: 2,
+                max: 18,
+                message: '名称长度必须在6到18位之间'
+              }
+            }
+          },
+
+        }
+      })
+    }
+
+    $(function () {
+       //角色树创建
+       createTreeView();
+       //菜单树创建
+       // createMenuTreeView();
+       //验证表单
+      validateFields();
+    });
+
+    function createTreeView(){
+      //var url= '[[@{/admin/sys/permission/tree}]]';   //  + '?parentId='+$("#parentId").val();
+      var url= root + '/admin/sys/permission/tree?parentId='+$("#parentId").val();
+      $.ajax({
+        url: url,
+        cache: false,
+        dataType: 'json',
+        success: function (datasource) {
+          console.log(datasource);
+          $('#treeview').treeview({
+            data: datasource,
+            showCheckbox:false,
+            onNodeSelected: function (event, node) {
+                $("#parentId").val(node.id);
+                selecedNode = node;
+            },
+          });
+        },
+        error: function () {
+          alert("异常！");
+        }
+      })
+    }
+
+
+     function submitHanlder(){
+        var listChecked = $('#treeview').treeview('getChecked');
+        $("#roleForm").remove("#roleIds");
+        var length = listChecked.length;
+
+        for(var i=0;i<length;i++ ){
+            var role = listChecked[i];
+            var roleIdsHtml = '<input type ="hidden" name="roleIds" value="'+ role.id +'">';
+            $("#roleForm").append(roleIdsHtml);
+        }
+      }
+</script>
+</body>

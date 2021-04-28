@@ -2,20 +2,16 @@ package com.hjx.webmaker.modules.art.web.admin;
 
 import com.hjx.webmaker.modules.art.domain.Channel;
 import com.hjx.webmaker.modules.art.service.IChannelService;
+import com.hjx.webmaker.modules.base.dto.ResultVo;
+import com.hjx.webmaker.modules.base.utils.ResultVoUtil;
 import com.hjx.webmaker.modules.base.web.BaseRestController;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -53,5 +49,22 @@ public class ChannelRestController extends BaseRestController<Channel> {
 
         List list = this.channelService.getTree(parentId, channelId);
         return list;
+    }
+
+
+    @ApiOperation(value = "删除对象", notes = "删除对象", httpMethod = "POST", tags = "频道")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "对象ID", dataType = "String", paramType = "query")
+    })
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "删除成功", response = ResultVo.class),
+            @ApiResponse(code = 200, message = "删除成功", response = ResultVo.class),
+    })
+    @PostMapping("deleteByKey/{id}")
+    public ResultVo deleteByKey(@PathVariable(name = "id") String id,
+                                HttpServletRequest request, HttpServletResponse response) {
+        int result = this.channelService.deleteByPrimaryKey(id);
+
+        return result > 0 ? ResultVoUtil.success() : ResultVoUtil.error(400, "删除失败");
     }
 }

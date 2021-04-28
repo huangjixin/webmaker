@@ -82,6 +82,6 @@ public class PermissionController extends BaseController<Permission> {
         permission.setUpdateTime(new Date());
         this.permissionService.updateByPrimaryKeySelective(permission);
         uiModel.addAttribute("permission", permission);
-        return prefix + "/edit";
+        return "redirect:/" + prefix + "/edit/"+id;
     }
 }

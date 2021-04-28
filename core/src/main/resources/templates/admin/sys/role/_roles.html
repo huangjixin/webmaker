@@ -1,6 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
-<body th:fragment="articles">
+<body th:fragment="roles">
 <link rel="stylesheet" th:href="@{/js/bootstrap-table.css}">
 <link rel="stylesheet" th:href="@{/js/bootstrap-treeview.min.css}">
 <!--<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap-table/1.15.4/bootstrap-table.min.css">-->
@@ -14,23 +14,23 @@
 <!--<script src="https://cdn.bootcss.com/bootstrap-table/1.15.4/locale/bootstrap-table-zh-CN.min.js"></script>
 <script src="https://cdn.bootcss.com/bootstrap-table/1.15.4/extensions/export/bootstrap-table-export.min.js"></script>-->
 
-<h3 class="page-header">文章列表</h3>
+<h3 class="page-header">角色列表</h3>
 <div class="form-inline" id="toolbar">
-    <a th:href="@{/admin/art/article/create}">
+    <a th:href="@{/admin/sys/role/create}">
         <button id="addBtn" type="button" class="btn btn-success">
             <i class="fa fa-plus" aria-hidden="true">&nbsp;添加</i></button>
     </a>
     <button id="removeBtn" class="btn btn-danger" onclick="deleteBatch();" disabled>
         <i class="glyphicon glyphicon-remove"></i>&nbsp;删除
     </button>
-    <input type="text" class="form-control mb-2 mr-sm-2" id="name" placeholder="文章名称">
+    <input type="text" class="form-control mb-2 mr-sm-2" id="name" placeholder="角色名称">
     <input id="channelId" type="hidden" name="channelId" >
     <input id="channelName" name="channelName" readonly>
-    <button id="channelIdSetBtn" class="btn btn-primary" type="button" data-toggle="modal" data-target="#channelModal">文章频道
+    <button id="channelIdSetBtn" class="btn btn-primary" type="button" data-toggle="modal" data-target="#channelModal">角色频道
     </button>
     <button type="button" id="btn_query" class="btn btn-secondary mb-2"><i class="fa fa-search" aria-hidden="true"></i></button>
 </div>
-<table id="articlesGrid"
+<table id="rolesGrid"
        data-show-refresh="true"
        data-show-toggle="true"
        data-show-fullscreen="true"
@@ -49,7 +49,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="menuModalLabel">文章频道配置</h4>
+                <h4 class="modal-title" id="menuModalLabel">角色频道配置</h4>
             </div>
             <div class="modal-body">
                 <div id="treeview"></div>
@@ -65,7 +65,7 @@
     var root = [[${#servletContext.contextPath}]];
     // 批量删除
     function deleteBatch(){
-        var selections = $('#articlesGrid').bootstrapTable("getSelections");
+        var selections = $('#rolesGrid').bootstrapTable("getSelections");
         if(selections.length==0){
           $("#removeBtn").attr("disabled",true);
           return;
@@ -76,7 +76,7 @@
         }
 
         $.ajax({
-            url: [[@{/admin/art/article/deleteBatch}]],
+            url: [[@{/admin/sys/role/deleteBatch}]],
             cache: false,
             contentType: "application/json; charset=utf-8",
             type: "POST",
@@ -86,7 +86,7 @@
             },
             success: function (data) {
                 if(data == 200){
-                    $('#articlesGrid').bootstrapTable("refresh");
+                    $('#rolesGrid').bootstrapTable("refresh");
                     $("#removeBtn").attr("disabled",true);
                 }else{
                     alert(data.msg);
@@ -131,12 +131,12 @@
 
     function createUserTable(){
         //先销毁表格
-      $('#articlesGrid').bootstrapTable("destroy");
-      $("#articlesGrid").bootstrapTable({
+      $('#rolesGrid').bootstrapTable("destroy");
+      $("#rolesGrid").bootstrapTable({
         onClickRow:function(row, $element, field){
             $("#removeBtn").attr("disabled",false);
         },
-        url: [[@{/admin/art/article/listPage}]],
+        url: [[@{/admin/sys/role/listPage}]],
         //请求地址
         striped: true,
         //是否显示行间隔色
@@ -185,19 +185,19 @@
           checkbox:true  //第一列显示复选框
         },
         {
-          title: '文章名称',
+          title: '角色名称',
           field: 'name',
           sortName:'name',
           align: 'center',
           sortable: true,
           formatter: function (value, row, index) {
-            return '<a href="'+root+'/admin/art/article/edit/'+row.id+'">' +
+            return '<a href="'+root+'/admin/sys/role/edit/'+row.id+'">' +
                   row.name +
                   '</a>';
           }
         },
         {
-          title: '文章标题',
+          title: '角色标题',
           field: 'title',
           sortName:'title',
           align: 'center',
@@ -246,10 +246,10 @@
               //var sid_code = base64encode(row.id + '');   //  sid 加密处理
               // alert(sid_code);
               // data-toggle="modal"
-              return '<a href="'+root+'/admin/article/show/'+row.id+'">' +
+              return '<a href="'+root+'/admin/role/show/'+row.id+'">' +
                   '<i class="glyphicon glyphicon-eye-open" title="显示"></i> ' +
                   '</a>&nbsp;'+
-                  '<a href="'+root+'/admin/art/article/edit/'+row.id+'"  title="修改">' +
+                  '<a href="'+root+'/admin/sys/role/edit/'+row.id+'"  title="修改">' +
                   '<i class="glyphicon glyphicon-pencil"></i> ' +
                   '</a>&nbsp;'+
                   '<a href="javascript:void(0)" title="删除">' +
@@ -260,7 +260,7 @@
             'click a[title=删除]': function (e, value, row, index) {
                 if(confirm('此操作不可逆，请确认是否删除？')){
                     $.ajax({
-                        url: root + '/admin/art/article/deleteByKey/'+row.id,
+                        url: root + '/admin/sys/role/deleteByKey/'+row.id,
                         cache: false,
                         type: "post",
                         dataType: 'json',
@@ -270,7 +270,7 @@
                         //},
                         success: function (data) {
                             if(data.code == 200){
-                                $('#articlesGrid').bootstrapTable("refresh");
+                                $('#rolesGrid').bootstrapTable("refresh");
                                 $("#removeBtn").attr("disabled",true);
                             }else{
                                 alert(data.msg);
@@ -297,7 +297,7 @@
 
       $("#btn_query").click(function () {
          //点击查询是 使用刷新 处理刷新参数
-         $('#articlesGrid').bootstrapTable('refresh');
+         $('#rolesGrid').bootstrapTable('refresh');
       });
     });
 
