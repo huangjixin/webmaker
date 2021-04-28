@@ -33,8 +33,8 @@ import java.util.Map;
 /**
  * @author 黄记新
  */
-@Configuration
-@EnableAuthorizationServer
+//@Configuration
+//@EnableAuthorizationServer
 public class AuthorizationConfig extends AuthorizationServerConfigurerAdapter {
     @Autowired
     @Qualifier(value = "userService")

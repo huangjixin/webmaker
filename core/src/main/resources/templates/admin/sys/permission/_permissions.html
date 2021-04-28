@@ -89,7 +89,7 @@
               $.ajax({
                         url: root + '/admin/sys/permission/deleteByKey/'+selectedNode.id,
                         cache: false,
-                        type: "delete",
+                        type: "post",
                         dataType: 'json',
                         contentType: "application/json; charset=utf-8",
                         success: function (data) {

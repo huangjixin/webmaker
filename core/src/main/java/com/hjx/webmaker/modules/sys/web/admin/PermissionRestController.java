@@ -1,25 +1,25 @@
 package com.hjx.webmaker.modules.sys.web.admin;
 
+import com.hjx.webmaker.modules.base.dto.ResultVo;
+import com.hjx.webmaker.modules.base.utils.ResultVoUtil;
 import com.hjx.webmaker.modules.base.web.BaseRestController;
 import com.hjx.webmaker.modules.sys.domain.Permission;
 import com.hjx.webmaker.modules.sys.mapper.RoleMapper;
 import com.hjx.webmaker.modules.sys.service.IPermissionService;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+@Api(tags = "资源权限")
+@AllArgsConstructor
 @RestController
 @RequestMapping("admin/sys/permission")
 public class PermissionRestController extends BaseRestController<Permission> {
@@ -51,4 +51,21 @@ public class PermissionRestController extends BaseRestController<Permission> {
         List<Permission> list = this.permissionService.getTree(parentId, roleId);
         return list;
     }
+
+    @ApiOperation(value = "删除对象", notes = "删除对象", httpMethod = "POST", tags = "权限管理相关api")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "对象ID", dataType = "String", paramType = "query")
+    })
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "删除成功", response = ResultVo.class),
+            @ApiResponse(code = 200, message = "删除成功", response = ResultVo.class),
+    })
+    @PostMapping("deleteByKey/{id}")
+    public ResultVo deleteByKey(@PathVariable(name = "id") String id,
+                                HttpServletRequest request, HttpServletResponse response) {
+        int result = this.permissionService.deleteByPrimaryKey(id);
+
+        return result > 0 ? ResultVoUtil.success() : ResultVoUtil.error(400, "删除失败");
+    }
+
 }

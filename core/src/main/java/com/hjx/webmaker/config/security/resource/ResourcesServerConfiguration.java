@@ -20,8 +20,8 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import javax.annotation.Resource;
 
 
-@Configuration
-@EnableResourceServer
+//@Configuration
+//@EnableResourceServer
 //@Order(-1)
 public class ResourcesServerConfiguration extends ResourceServerConfigurerAdapter {
     private static Logger log = LogManager.getLogger(ResourcesServerConfiguration.class);
