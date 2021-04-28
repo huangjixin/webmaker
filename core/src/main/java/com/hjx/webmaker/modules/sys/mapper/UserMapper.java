@@ -6,6 +6,9 @@ import com.hjx.webmaker.modules.sys.dto.UserDto;
 import org.apache.ibatis.annotations.Param;
 
 public interface UserMapper extends BaseMapper<User> {
+    @Override
+    UserDto selectByPrimaryKey(Object id);
+
     UserDto selectByUserName(@Param("loginName") String loginName);
 
     /*long countByExample(UserCriteria example);

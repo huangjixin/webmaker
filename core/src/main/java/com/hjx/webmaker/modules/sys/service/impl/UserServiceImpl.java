@@ -61,6 +61,10 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
         return logger;
     }
 
+    @Override
+    public UserDto selectByPrimaryKey(Object id){
+        return this.userMapper.selectByPrimaryKey(id);
+    }
     /**
      * 根据用户名（邮箱，电话）查询对象。
      *

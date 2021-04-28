@@ -1,0 +1,307 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<body th:fragment="users">
+<link rel="stylesheet" th:href="@{/js/bootstrap-table.css}">
+<link rel="stylesheet" th:href="@{/js/bootstrap-treeview.min.css}">
+<!--<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap-table/1.15.4/bootstrap-table.min.css">-->
+<script th:src="@{/js/bootstrap-table.min.js}"></script>
+<script th:src="@{/js/locale/bootstrap-table-zh-CN.min.js}"></script>
+<script th:src="@{/js/tableExport.min.js}"></script>
+<script th:src="@{/js/extensions/export/bootstrap-table-export.min.js}"></script>
+<script th:src="@{/js/bootstrap-treeview.min.js}"></script>
+<!--<script src="https://cdn.bootcss.com/bootstrap-table/1.15.4/bootstrap-table.min.js"></script>-->
+<!--<script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>-->
+<!--<script src="https://cdn.bootcss.com/bootstrap-table/1.15.4/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap-table/1.15.4/extensions/export/bootstrap-table-export.min.js"></script>-->
+
+<h3 class="page-header">用户列表</h3>
+<div class="form-inline" id="toolbar">
+    <a th:href="@{/admin/sys/user/create}">
+        <button id="addBtn" type="button" class="btn btn-success">
+            <i class="fa fa-plus" aria-hidden="true">&nbsp;添加</i></button>
+    </a>
+    <button id="removeBtn" class="btn btn-danger" onclick="deleteBatch();" disabled>
+        <i class="glyphicon glyphicon-remove"></i>&nbsp;删除
+    </button>
+    <input type="text" class="form-control mb-2 mr-sm-2" id="name" placeholder="用户名称">
+    <input id="permissionId" type="hidden" name="permissionId" >
+    <input id="permissionName"  class="form-control mb-2 mr-sm-2" name="permissionName" readonly>
+    <button id="permissionIdSetBtn" class="btn btn-primary" type="button" data-toggle="modal" data-target="#permissionModal">资源
+    </button>
+    <button type="button" id="btn_query" class="btn btn-secondary mb-2"><i class="fa fa-search" aria-hidden="true"></i></button>
+</div>
+<table id="usersGrid"
+       data-show-refresh="true"
+       data-show-toggle="true"
+       data-show-fullscreen="true"
+       data-show-columns="true"
+       data-show-columns-toggle-all="true"
+       data-detail-view="false"
+       data-show-export="true"
+       data-click-to-select="true"
+       data-id-field="id"
+       data-show-footer="true">
+</table>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="permissionModal" tabindex="-1" user="dialog" aria-labelledby="menuModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="menuModalLabel">资源配置</h4>
+            </div>
+            <div class="modal-body">
+                <div id="treeview"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <!--<button type="button" class="btn btn-primary">确定</button>-->
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<script th:inline="javascript">
+    var root = [[${#servletContext.contextPath}]];
+    // 批量删除
+    function deleteBatch(){
+        var selections = $('#usersGrid').bootstrapTable("getSelections");
+        if(selections.length==0){
+          $("#removeBtn").attr("disabled",true);
+          return;
+        }
+        var ids=[];
+        for(var i=0;i<selections.length;i++){
+          ids.push(selections[i].id);
+        }
+
+        $.ajax({
+            url: [[@{/admin/sys/user/deleteBatch}]],
+            cache: false,
+            //contentType: "application/json; charset=utf-8",
+            type: "POST",
+            traditional:true,//必要
+            //dataType: 'json',
+            data:{
+              list:ids
+            },
+            success: function (data) {
+                if(data.code == 200){
+                    $('#usersGrid').bootstrapTable("refresh");
+                    $("#removeBtn").attr("disabled",true);
+                }else{
+                    alert(data.msg);
+                }
+            },
+            error: function (error) {
+              alert("异常！");
+            }
+        });
+    }
+
+    // 初始化表格
+    function init(){
+        createTreeView();
+        createUserTable();
+    }
+
+    function createTreeView(){
+      //var url= '[[@{/admin/sys/permission/tree}]]';   //  + '?permissionId='+$("#permissionId").val();
+      var url= root + '/admin/sys/permission/tree';
+      $.ajax({
+        url: url,
+        cache: false,
+        dataType: 'json',
+        success: function (datasource) {
+          console.log(datasource);
+          $('#treeview').treeview({
+            data: datasource,
+            showCheckbox:false,
+            onNodeSelected: function (event, node) {
+                $("#permissionId").val(node.id);
+                $("#permissionName").val(node.name);
+                selecedNode = node;
+            },
+          });
+        },
+        error: function () {
+          alert("异常！");
+        }
+      })
+    }
+
+    function createUserTable(){
+        //先销毁表格
+      $('#usersGrid').bootstrapTable("destroy");
+      $("#usersGrid").bootstrapTable({
+        onClickRow:function(row, $element, field){
+            $("#removeBtn").attr("disabled",false);
+        },
+        url: [[@{/admin/sys/user/listPage}]],
+        //请求地址
+        striped: true,
+        //是否显示行间隔色
+        search: true,
+        showHeader: true,
+        //是否显示列头
+        showLoading: true,
+        pageNumber: 1,
+        //初始化加载第一页
+        pagination: true,
+        //是否分页
+        sidePagination: 'server',
+        //server:服务器端分页|client：前端分页
+        pageSize: 50,
+        //单页记录数
+        pageList: [50, 100, 200],
+        //可选择单页记录数
+        showRefresh: true,
+        uniqueId: 'ID',
+        sortable: true,
+        showMultiSort: true, // 多列排序
+        //sortPriority: [{"sortName":"createTime","sortOrder":"desc"},{"sortName":"realName","sortOrder":"desc"},{"name":"wfdVersion","sortOrder":"asc"}],
+        //刷新按钮
+        toolbar: '#toolbar',
+        //工具按钮用哪个容器
+        queryParams: function(params) { //上传服务器的参数
+          //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+          var temp = {
+              rows: params.limit,                         //页面大小
+              page: (params.offset / params.limit) + 1,   //页码
+              sort: params.sort,      //排序列名,
+              permissionId: $("#permissionId").val(),
+              name: $.trim($('#name').val()),
+              sortOrder: params.order //排位命令（desc，asc）
+          };
+
+          return temp;
+        },onSort: function (name, order) {
+           console.log(name, order)
+        },onMultipleSort: function (name, order) {
+           console.log(this.sortPriority)
+           console.log(order)
+        },
+        columns: [
+        {
+          checkbox:true  //第一列显示复选框
+        },
+        {
+          title: '用户名称',
+          field: 'name',
+          sortName:'name',
+          align: 'center',
+          sortable: true,
+          formatter: function (value, row, index) {
+            return '<a href="'+root+'/admin/sys/user/edit/'+row.id+'">' +
+                  row.name +
+                  '</a>';
+          }
+        },
+        {
+          title: '用户标题',
+          field: 'title',
+          sortName:'title',
+          align: 'center',
+          sortable: true
+        },
+        {
+          title: '邮箱',
+          field: 'email',
+          align: 'center',
+          sortable: false
+        },
+        {
+          title: '创建日期',
+          field: 'createdTime',
+          align: 'center',
+          sortable: true,
+          sortName:'created_time'
+        },
+        {
+          title: '更新日期',
+          field: 'updateTime',
+          align: 'center',
+          sortable: true,
+          sortName:'update_time'
+        },
+        {
+          title: '创建人',
+          field: 'createBy',
+          align: 'center',
+          sortable: false
+        },
+        {
+          title: '更新人',
+          field: 'updateBy',
+          align: 'center',
+          sortable: false
+        },
+        {
+          field: 'operate',
+          title: '操作',
+          align: 'center',
+          valign: 'middle',
+          clickToSelect: false,
+          formatter: function (value, row, index) {
+              // var sid_code = base64Encode(row.id);
+              //var sid_code = base64encode(row.id + '');   //  sid 加密处理
+              // alert(sid_code);
+              // data-toggle="modal"
+              return '<a href="'+root+'/admin/user/show/'+row.id+'">' +
+                  '<i class="glyphicon glyphicon-eye-open" title="显示"></i> ' +
+                  '</a>&nbsp;'+
+                  '<a href="'+root+'/admin/sys/user/edit/'+row.id+'"  title="修改">' +
+                  '<i class="glyphicon glyphicon-pencil"></i> ' +
+                  '</a>&nbsp;'+
+                  '<a href="javascript:void(0)" title="删除">' +
+                  '<i class="glyphicon glyphicon-trash text-danger"></i> ' +
+                  '</a>';
+          },
+          events: {
+            'click a[title=删除]': function (e, value, row, index) {
+                if(confirm('此操作不可逆，请确认是否删除？')){
+                    $.ajax({
+                        url: root + '/admin/sys/user/deleteByKey/'+row.id,
+                        cache: false,
+                        type: "post",
+                        dataType: 'json',
+                        contentType: "application/json; charset=utf-8",
+                        //data:{
+                        //  id:
+                        //},
+                        success: function (data) {
+                            if(data.code == 200){
+                                $('#usersGrid').bootstrapTable("refresh");
+                                $("#removeBtn").attr("disabled",true);
+                            }else{
+                                alert(data.msg);
+                            }
+                        },
+                        error: function () {
+                          alert("异常！");
+                        }
+                    });
+                }
+            },
+            'click a[title=修改]': function (e, value, row, index) {
+                // e.preventDefault();
+                // alert('click change button');
+            },
+          }
+        }]
+      })
+    }
+
+    //
+    $(document).ready(function() {
+      init();
+
+      $("#btn_query").click(function () {
+         //点击查询是 使用刷新 处理刷新参数
+         $('#usersGrid').bootstrapTable('refresh');
+      });
+    });
+
+
+</script>
+</body>

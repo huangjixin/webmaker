@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5" layout:decorator="layout/admin/_application_layout">
+<title layout:fragment="title">用户管理-新增</title>
+
+<div layout:fragment="content">
+    <div th:include="admin/shared/_header::header"></div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+                <div th:include="admin/shared/_sidebar::sidebar('用户管理')"></div>
+            </div>
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                <ul class="breadcrumb">
+                    <li><a th:href="@{/admin/sys/home}">首页</a></li>
+                    <li><a th:href="@{/admin/sys/user}">用户管理</a></li>
+                    <li><a th:href="@{/admin/sys/user/create}">用户新增</a></li>
+                </ul>
+                <h3 class="page-header">用户列信息</h3>
+                <form id="userForm" class="form-horizontal"
+                      th:action="@{/admin/sys/user}"
+                      accept-charset="UTF-8" method="post" onsubmit="submitHanlder()"
+                      style="max-width: 600px;">
+                    <div th:include="admin/sys/user/_form::form_user"></div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $("#codesys").trigger("click");
+        });
+
+    </script>
+</div>
+</html>

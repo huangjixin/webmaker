@@ -2,9 +2,12 @@ package com.hjx.webmaker.modules.sys.service;
 
 import com.hjx.webmaker.modules.base.service.IBaseService;
 import com.hjx.webmaker.modules.sys.domain.User;
+import com.hjx.webmaker.modules.sys.dto.RoleDto;
 import com.hjx.webmaker.modules.sys.dto.UserDto;
 
 public interface IUserService extends IBaseService<User> {
+    @Override
+    UserDto selectByPrimaryKey(Object id);
     /**
      * 根据用户名（邮箱，电话）查询对象。
      * @param loginName
