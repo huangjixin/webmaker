@@ -51,7 +51,7 @@
 <div class="actions form-group">
     <div class="col-md-2"></div>
     <div class="col-md-10 form-inline">
-        <button id="submitBtn" type="submit" onsubmit="submitHanlder()" class="btn btn-success">提交</button>
+        <button id="submitBtn" type="submit" class="btn btn-success">提交</button>
         <button id="resetBtn" type="reset" class="btn btn-primary">重置</button>
         <a th:href="@{/admin/sys/role}">
             <button type="button" class="btn btn-default">
@@ -248,7 +248,8 @@
 
      function submitHanlder(){
         var listChecked = $('#treeview').treeview('getChecked');
-        $("#roleForm").remove("#permissionIds");
+        //$("#roleForm").remove("#permissionIds");
+        $("#roleForm").find("input[name='permissionIds']").remove();
         var length = listChecked.length;
 
         for(var i=0;i<length;i++ ){

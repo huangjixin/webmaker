@@ -71,11 +71,11 @@ public class RoleController extends BaseController<Role> {
     }
 
     @PostMapping("edit/{id}")
-    public String edit(Model uiModel, @PathVariable("id") String id, @ModelAttribute Role role, HttpServletRequest request, HttpServletResponse response) {
+    public String edit(Model uiModel, @PathVariable("id") String id, @ModelAttribute RoleDto role, HttpServletRequest request, HttpServletResponse response) {
         Role chan = this.roleService.selectByPrimaryKey(id);
 
         role.setUpdateTime(new Date());
-        this.roleService.updateByPrimaryKeySelective(role);
+        this.roleService.update(role);
         uiModel.addAttribute("role", role);
         return "redirect:/" + prefix + "/edit/"+id;
     }
