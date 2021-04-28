@@ -127,7 +127,7 @@
 
     function createTreeView(){
       //var url= '[[@{/admin/sys/permission/tree}]]';   //  + '?parentId='+$("#parentId").val();
-      var url= root + '/admin/sys/permission/tree?parentId='+$("#parentId").val();
+      var url= root + '/admin/sys/permission/tree?roleId='+$("#id").val();
       $.ajax({
         url: url,
         cache: false,

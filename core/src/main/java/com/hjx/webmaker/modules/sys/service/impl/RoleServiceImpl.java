@@ -59,6 +59,11 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements IRoleServi
         return logger;
     }
 
+    @Override
+    public RoleDto selectByPrimaryKey(Object id) {
+        return this.roleMapper.selectByPrimaryKey(id);
+    }
+
     /**
      * 插入角色对象
      *

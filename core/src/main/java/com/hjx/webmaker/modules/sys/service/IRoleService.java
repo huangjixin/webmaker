@@ -6,6 +6,8 @@ import com.hjx.webmaker.modules.sys.dto.RoleDto;
 import com.hjx.webmaker.modules.sys.dto.UserDto;
 
 public interface IRoleService extends IBaseService<Role> {
+    @Override
+    RoleDto selectByPrimaryKey(Object id);
     /**
      * 插入角色对象
      * @param roleDto

@@ -95,19 +95,38 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    ID, NAME, IS_EXPIRED, IS_LOCKED, IS_ENABLED, TYPE, STATUS, CREATE_BY, CREATE_TIME, 
-    UPDATE_BY, UPDATE_TIME, EN_NAME
+    sys_role.ID, sys_role.NAME, sys_role.IS_EXPIRED, sys_role.IS_LOCKED, sys_role.IS_ENABLED, sys_role.TYPE,
+    sys_role.STATUS, sys_role.CREATE_BY, sys_role.CREATE_TIME,
+    sys_role.UPDATE_BY, sys_role.UPDATE_TIME, sys_role.EN_NAME
   </sql>
-
-  <select id="selectByExample" parameterType="com.hjx.webmaker.modules.sys.domain.RoleCriteria" resultMap="BaseResultMap">
+  <sql id="Permission_Column_List">
+    sys_permission.ID as PERMISSION_ID,
+    sys_permission.NAME as PERMISSION_NAME,
+    sys_permission.IS_EXPIRED as PERMISSION_IS_EXPIRED,
+    sys_permission.IS_LOCKED as PERMISSION_IS_LOCKED,
+    sys_permission.IS_ENABLED as PERMISSION_IS_ENABLED,
+    sys_permission.TYPE as PERMISSION_TYPE,
+    sys_permission.STATUS as PERMISSION_STATUS,
+    sys_permission.CREATE_BY as PERMISSION_CREATE_BY,
+    sys_permission.CREATE_TIME as PERMISSION_CREATE_TIME,
+    sys_permission.UPDATE_BY as PERMISSION_UPDATE_BY,
+    sys_permission.UPDATE_TIME as PERMISSION_UPDATE_TIME,
+    sys_permission.EN_NAME as PERMISSION_EN_NAME,
+    sys_permission.PARENT_ID as PERMISSION_PARENT_ID,
+    sys_permission.CODE as PERMISSION_CODE,
+    sys_permission.IS_MENU as PERMISSION_IS_MENU,
+    sys_permission.URL as PERMISSION_URL
+  </sql>
+  <select id="selectByExample" parameterType="com.hjx.webmaker.modules.sys.domain.RoleCriteria"
+          resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
-    <include refid="Base_Column_List" />
+    <include refid="Base_Column_List"/>
     from sys_role
     <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
+      <include refid="Example_Where_Clause"/>
     </if>
     <if test="orderByClause != null">
       order by ${orderByClause}
@@ -116,11 +135,14 @@
       limit #{limitStart} , #{limitSize}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="RoleDtoMap">
+    select
+    <include refid="Base_Column_List"/>,
+    <include refid="Permission_Column_List"/>
     from sys_role
-    where ID = #{id,jdbcType=VARCHAR}
+    LEFT JOIN sys_role_permission ON sys_role.ID = sys_role_permission.ROLE_ID
+    LEFT JOIN sys_permission ON sys_role_permission.PERMISSION_ID = sys_permission.ID
+    where sys_role.ID = #{id,jdbcType=VARCHAR} or sys_role.name = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from sys_role

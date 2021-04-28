@@ -6,6 +6,8 @@ import com.hjx.webmaker.modules.sys.dto.RoleDto;
 
 public interface RoleMapper extends BaseMapper<Role> {
 
+    @Override
+    RoleDto selectByPrimaryKey(Object id);
     /**
      * 根据ID查询带有权限的角色。
      * @param roleId

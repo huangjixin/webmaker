@@ -46,7 +46,7 @@ public class RoleController extends BaseController<Role> {
 
     @GetMapping("edit/{id}")
     public String edit(Model uiModel, @PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) {
-        Role role = this.roleService.selectByPrimaryKey(id);
+        RoleDto role = this.roleService.selectByPrimaryKey(id);
 
         uiModel.addAttribute("role", role);
         return prefix + "/edit";
