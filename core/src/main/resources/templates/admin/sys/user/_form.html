@@ -18,11 +18,11 @@
        th:value="${permission.id}">-->
 
 <div class="form-group">
-    <label class="col-md-2 control-label" for="name">名称</label>
+    <label class="col-md-2 control-label" for="loginName">名称</label>
     <div class="col-md-10">
-        <input id="name" name="name" class="form-control" data-bv-notempty="true" data-bv-notempty-message="不能为空"
-               placeholder="名称" th:value="${user.name}" required>
-        <span th:if="${#fields.hasErrors('user.name')}" th:errors="${user.name}"></span>
+        <input id="loginName" name="loginName" class="form-control" data-bv-notempty="true" data-bv-notempty-message="不能为空"
+               placeholder="名称" th:value="${user.loginName}" required>
+        <span th:if="${#fields.hasErrors('user.loginName')}" th:errors="${user.loginName}"></span>
     </div>
 
 </div>
@@ -41,10 +41,12 @@
 </div>
 
 <div class="form-group">
-    <label class="col-md-2 control-label" for="treeview">资源权限</label>
+    <label class="col-md-2 control-label" for="roleIds">角色</label>
     <div class="col-md-10">
-        <input id="id" name="id" type="hidden" th:value="${user.id}">
-        <div id="treeview"></div>
+        <input id="roleIds" type="checkbox" name="roleIds" th:each="role:${user.roles}"
+               th:value="${role.id}"
+               th:text="'&nbsp;'+${role.name+'&nbsp;&nbsp;&nbsp;&nbsp;'}"
+               th:attr="checked=${user.roleIds.contains(role.id)?true:false}">
     </div>
 </div>
 
@@ -95,7 +97,7 @@
           validating: 'glyphicon glyphicon-refresh'
         },
         fields: {
-          name: {
+          loginName: {
             message: '名称验证失败',
             validators: {
               notEmpty: {
@@ -114,149 +116,8 @@
     }
 
     $(function () {
-       //用户树创建
-       createTreeView();
-       //菜单树创建
-       // createMenuTreeView();
-       //验证表单
       validateFields();
     });
 
-    var nodeCheckedSilent = false;
-    var nodeUncheckedSilent = false;
-
-    function createTreeView(){
-      //var url= '[[@{/admin/sys/permission/tree}]]';   //  + '?parentId='+$("#parentId").val();
-      var url= root + '/admin/sys/permission/tree?userId='+$("#id").val();
-      $.ajax({
-        url: url,
-        cache: false,
-        dataType: 'json',
-        success: function (datasource) {
-          console.log(datasource);
-          $('#treeview').treeview({
-            data: datasource,
-            showCheckbox:true,
-            onNodeChecked: nodeChecked,
-            onNodeUnchecked: nodeUnchecked,
-            onNodeSelected: function (event, node) {
-              //$("#removeBtn").attr("disabled",false);
-              //$("#editBtn").attr("disabled",false);
-              // var Pid = $('#treeview').treeview('getParent', node.nodeId);  //获取父辈id
-              // //路径追加显示
-              // function func(nodeId, text) //递归调用
-              // {
-              //   if (nodeId == 0) {
-              //     return '富士化工';
-              //   }
-              //   var id = $('#treeview').treeview('getParent', nodeId);
-              //   return func(id.nodeId, id.text) + " > " + text;
-              // }
-              // var locationText = func(node.nodeId, node.text);
-              // $(selectors.currentLocation).html('当前位置：' + locationText);
-            },
-          });
-        },
-        error: function () {
-          alert("异常！");
-        }
-      })
-    }
-
-
-    function nodeChecked(event, node) {
-       if (nodeCheckedSilent) {
-                return;
-       }
-            nodeCheckedSilent = true;
-            checkAllParent(node);
-            checkAllSon(node);
-            nodeCheckedSilent = false;
-    }
-
-
-    function nodeUnchecked(event, node) {
-        if (nodeUncheckedSilent)
-           return;
-        nodeUncheckedSilent = true;
-        uncheckAllParent(node);
-        uncheckAllSon(node);
-        nodeUncheckedSilent = false;
-     }
-
-    //选中全部父节点
-    function checkAllParent(node) {
-        $('#treeview').treeview('checkNode', node.nodeId, {
-                silent: true
-        });
-
-        var parentNode = $('#searchTree').treeview('getParent', node.nodeId);
-        if (!("nodeId" in parentNode)) {
-            return;
-        } else {
-            checkAllParent(parentNode);
-        }
-    }
-
-     //取消全部父节点
-      function uncheckAllParent(node) {
-         $('#treeview').treeview('uncheckNode', node.nodeId, {
-                silent: true
-         });
-         var siblings = $('#searchTree').treeview('getSiblings', node.nodeId);
-         var parentNode = $('#searchTree').treeview('getParent', node.nodeId);
-         if (!("nodeId" in parentNode)) {
-                return;
-         }
-
-         var isAllUnchecked = true; //是否全部没选中
-         for (var i in siblings) {
-             if (siblings[i].state.checked) {
-                isAllUnchecked = false;
-                break;
-             }
-          }
-
-         if (isAllUnchecked) {
-            uncheckAllParent(parentNode);
-         }
-
-      }
-
-        //级联选中所有子节点
-        function checkAllSon(node) {
-            $('#treeview').treeview('checkNode', node.nodeId, {
-                silent: true
-            });
-            if (node.nodes != null && node.nodes.length > 0) {
-                for (var i in node.nodes) {
-                    checkAllSon(node.nodes[i]);
-                }
-            }
-        }
-        //级联取消所有子节点
-        function uncheckAllSon(node) {
-            $('#treeview').treeview('uncheckNode', node.nodeId, {
-                silent: true
-            });
-            if (node.nodes != null && node.nodes.length > 0) {
-                for (var i in node.nodes) {
-                    uncheckAllSon(node.nodes[i]);
-                }
-            }
-        }
-
-     function submitHanlder(){
-        var listChecked = $('#treeview').treeview('getChecked');
-        //$("#userForm").remove("#permissionIds");
-        $("#userForm").find("input[name='permissionIds']").remove();
-        var length = listChecked.length;
-
-        for(var i=0;i<length;i++ ){
-            var permission = listChecked[i];
-            var permissionIdsHtml = '<input type ="hidden" name="permissionIds" value="'+ permission.id +'">';
-            $("#userForm").append(permissionIdsHtml);
-        }
-      }
 </script>
 </body>

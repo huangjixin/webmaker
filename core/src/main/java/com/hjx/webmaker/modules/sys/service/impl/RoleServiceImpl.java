@@ -131,4 +131,9 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements IRoleServi
 
         return result;
     }
+
+    @Override
+    public List<Role> selectAll() {
+        return roleMapper.selectByExample(null);
+    }
 }

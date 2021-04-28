@@ -67,9 +67,9 @@ public class UserRestController extends BaseRestController<User> {
         if (request.getParameterNames().hasMoreElements()) {
             example = new UserCriteria();
             UserCriteria.Criteria criteria = example.createCriteria();
-            String name = request.getParameter("name");
-            if (!StringUtils.isEmpty(name)) {
-                criteria.andLoginNameLike("%" + name + "%");
+            String loginName = request.getParameter("loginName");
+            if (!StringUtils.isEmpty(loginName)) {
+                criteria.andLoginNameLike("%" + loginName + "%");
             }
             
             String sort = request.getParameter("sort");

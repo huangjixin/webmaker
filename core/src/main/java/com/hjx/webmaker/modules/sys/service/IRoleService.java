@@ -5,6 +5,8 @@ import com.hjx.webmaker.modules.sys.domain.Role;
 import com.hjx.webmaker.modules.sys.dto.RoleDto;
 import com.hjx.webmaker.modules.sys.dto.UserDto;
 
+import java.util.List;
+
 public interface IRoleService extends IBaseService<Role> {
     @Override
     RoleDto selectByPrimaryKey(Object id);
@@ -21,4 +23,6 @@ public interface IRoleService extends IBaseService<Role> {
      * @return
      */
     int update(RoleDto roleDto);
+
+    List<Role> selectAll();
 }

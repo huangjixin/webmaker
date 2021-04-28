@@ -2,8 +2,10 @@ package com.hjx.webmaker.modules.sys.web.admin;
 
 import com.hjx.webmaker.modules.base.utils.UUIDUtil;
 import com.hjx.webmaker.modules.base.web.BaseController;
+import com.hjx.webmaker.modules.sys.domain.Role;
 import com.hjx.webmaker.modules.sys.domain.User;
 import com.hjx.webmaker.modules.sys.dto.UserDto;
+import com.hjx.webmaker.modules.sys.service.IRoleService;
 import com.hjx.webmaker.modules.sys.service.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("admin/sys/user")
@@ -30,6 +33,10 @@ public class UserController extends BaseController<User> {
     @Autowired
     private IUserService userService;
 
+    @Qualifier(value = "roleService")
+    @Autowired
+    private IRoleService roleService;
+
 
     @GetMapping
     public String index() {
@@ -40,14 +47,18 @@ public class UserController extends BaseController<User> {
     public String create(Model uiModel, UserDto userDto, HttpServletRequest request, HttpServletResponse response) {
 //        List users = this.userService.getTree(null);
 //        userDto.setChildren(users);
+        List<Role> roles = this.roleService.selectAll();
+        uiModel.addAttribute("roles", roles);
         uiModel.addAttribute("user", userDto);
         return prefix + "/create";
     }
 
     @GetMapping("edit/{id}")
     public String edit(Model uiModel, @PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) {
+        List<Role> roles = this.roleService.selectAll();
+        uiModel.addAttribute("roles", roles);
         UserDto user = this.userService.selectByUserName(id);
-
+        user.setRoleIdsByRoles();
         uiModel.addAttribute("user", user);
         return prefix + "/edit";
     }
@@ -72,11 +83,12 @@ public class UserController extends BaseController<User> {
 
     @PostMapping("edit/{id}")
     public String edit(Model uiModel, @PathVariable("id") String id, @ModelAttribute UserDto user, HttpServletRequest request, HttpServletResponse response) {
-        User chan = this.userService.selectByPrimaryKey(id);
-
+        UserDto u = this.userService.selectByUserName(id);
+        ;
+        user.setRoleIdsByRoles();
         user.setUpdateTime(new Date());
         this.userService.update(user);
         uiModel.addAttribute("user", user);
-        return "redirect:/" + prefix + "/edit/"+id;
+        return "redirect:/" + prefix + "/edit/" + id;
     }
 }

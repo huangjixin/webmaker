@@ -187,13 +187,13 @@
         },
         {
           title: '用户名称',
-          field: 'name',
-          sortName:'name',
+          field: 'loginName',
+          sortName:'loginName',
           align: 'center',
           sortable: true,
           formatter: function (value, row, index) {
             return '<a href="'+root+'/admin/sys/user/edit/'+row.id+'">' +
-                  row.name +
+                  row.loginName +
                   '</a>';
           }
         },
