@@ -39,7 +39,7 @@ public class PermissionRestController extends BaseRestController<Permission> {
      * @param response
      * @return
      */
-    @ApiOperation(value = "获取权限数据结构数据", notes = "获取权限数据结构数据", httpMethod = "GET", tags = "权限管理相关api")
+    @ApiOperation(value = "获取权限数据结构数据", notes = "获取权限数据结构数据", httpMethod = "GET", tags = "资源权限")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "parentId", value = "父亲ID，默认为空字符串，如果不为空还要查询该字段所在条目，再在列表当中设置为选中状态", dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "roleId", value = "角色ID，默认为空字符串，如果不为空还要查询该字段所在条目数，再在列表当中设置为选中状态", dataType = "String", paramType = "query"),
@@ -52,7 +52,7 @@ public class PermissionRestController extends BaseRestController<Permission> {
         return list;
     }
 
-    @ApiOperation(value = "删除对象", notes = "删除对象", httpMethod = "POST", tags = "权限管理相关api")
+    @ApiOperation(value = "删除对象", notes = "删除对象", httpMethod = "POST", tags = "资源权限")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "对象ID", dataType = "String", paramType = "query")
     })

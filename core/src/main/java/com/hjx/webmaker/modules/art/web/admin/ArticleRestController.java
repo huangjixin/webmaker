@@ -6,6 +6,7 @@ import com.hjx.webmaker.modules.art.service.IArticleService;
 import com.hjx.webmaker.modules.base.dto.DataGridDto;
 import com.hjx.webmaker.modules.base.web.BaseRestController;
 import io.swagger.annotations.*;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+@Api(tags = "文章")
+@AllArgsConstructor
 @RestController
 @RequestMapping("admin/art/article")
 public class ArticleRestController extends BaseRestController<Article> {
@@ -30,7 +33,7 @@ public class ArticleRestController extends BaseRestController<Article> {
     @Autowired
     private IArticleService articleService;
 
-    @ApiOperation(value = "获取文章分页数据", notes = "获取文章分页数据", httpMethod = "GET", tags = "文章管理相关api")
+    @ApiOperation(value = "获取文章分页数据", notes = "获取文章分页数据", httpMethod = "GET", tags = "文章")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "第几页开始，默认为1", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "rows", value = "每页记录数的大小，默认为50", dataType = "int", paramType = "query"),
