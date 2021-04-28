@@ -24,9 +24,9 @@
         <i class="glyphicon glyphicon-remove"></i>&nbsp;删除
     </button>
     <input type="text" class="form-control mb-2 mr-sm-2" id="name" placeholder="角色名称">
-    <input id="channelId" type="hidden" name="channelId" >
-    <input id="channelName" name="channelName" readonly>
-    <button id="channelIdSetBtn" class="btn btn-primary" type="button" data-toggle="modal" data-target="#channelModal">角色频道
+    <input id="permissionId" type="hidden" name="permissionId" >
+    <input id="permissionName"  class="form-control mb-2 mr-sm-2" name="permissionName" readonly>
+    <button id="permissionIdSetBtn" class="btn btn-primary" type="button" data-toggle="modal" data-target="#permissionModal">资源
     </button>
     <button type="button" id="btn_query" class="btn btn-secondary mb-2"><i class="fa fa-search" aria-hidden="true"></i></button>
 </div>
@@ -43,13 +43,13 @@
        data-show-footer="true">
 </table>
 <!-- 模态框（Modal） -->
-<div class="modal fade" id="channelModal" tabindex="-1" role="dialog" aria-labelledby="menuModalLabel"
+<div class="modal fade" id="permissionModal" tabindex="-1" role="dialog" aria-labelledby="menuModalLabel"
      aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="menuModalLabel">角色频道配置</h4>
+                <h4 class="modal-title" id="menuModalLabel">资源配置</h4>
             </div>
             <div class="modal-body">
                 <div id="treeview"></div>
@@ -106,8 +106,8 @@
     }
 
     function createTreeView(){
-      //var url= '[[@{/admin/sys/permission/tree}]]';   //  + '?channelId='+$("#channelId").val();
-      var url= root + '/admin/art/channel/tree';
+      //var url= '[[@{/admin/sys/permission/tree}]]';   //  + '?permissionId='+$("#permissionId").val();
+      var url= root + '/admin/sys/permission/tree';
       $.ajax({
         url: url,
         cache: false,
@@ -118,8 +118,8 @@
             data: datasource,
             showCheckbox:false,
             onNodeSelected: function (event, node) {
-                $("#channelId").val(node.id);
-                $("#channelName").val(node.name);
+                $("#permissionId").val(node.id);
+                $("#permissionName").val(node.name);
                 selecedNode = node;
             },
           });
@@ -169,7 +169,7 @@
               rows: params.limit,                         //页面大小
               page: (params.offset / params.limit) + 1,   //页码
               sort: params.sort,      //排序列名,
-              channelId: $("#channelId").val(),
+              permissionId: $("#permissionId").val(),
               name: $.trim($('#name').val()),
               sortOrder: params.order //排位命令（desc，asc）
           };
