@@ -14,6 +14,8 @@
 <script src="https://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.3/js/bootstrapValidator.min.js"></script>
 <script src="https://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.3/js/language/zh_CN.min.js"></script>
 <script src="https://cdn.bootcss.com/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js"></script>-->
+<!--<input id="permissionIds" type ="hidden" name="permissionIds" th:each="permission:${role.permissions}"
+       th:value="${permission.id}">-->
 
 <div class="form-group">
     <label class="col-md-2 control-label" for="name">名称</label>
@@ -24,38 +26,6 @@
     </div>
 
 </div>
-
-<div class="form-group">
-    <label class="col-md-2 control-label" for="code">角色表达式</label>
-    <div class="col-md-10">
-        <input id="code" type="text" name="code" class="form-control" placeholder="角色表达式" th:value="${role.code}">
-        <span th:if="${#fields.hasErrors('role.code')}" th:errors="${role.code}"></span>
-    </div>
-</div>
-
-<div class="form-group">
-    <label class="col-md-2 control-label" for="code">是否为菜单</label>
-    <div class="col-md-10">
-        <input type="radio" name="isMenu" value="1" th:attr="checked=${role.isMenu==1?true:false}">&nbsp;是
-        <input type="radio" name="isMenu" value="0" th:attr="checked=${role.isMenu==0?true:false}">&nbsp;否
-       <!-- <input id="roleIds" type="checkbox" name="roleIds" th:each="role:${roles}"
-               th:value="${role.id}"
-               th:text="${role.name+'&nbsp;&nbsp;&nbsp;&nbsp;'}"
-               th:attr="checked=${user.roleIds.contains(role.id)?true:false}">
-
-        <input id="isMenu" type="text" name="isMenu" class="form-control" placeholder="角色表达式" th:value="${role.isMenu}">-->
-        <span th:if="${#fields.hasErrors('role.isMenu')}" th:errors="${role.isMenu}"></span>
-    </div>
-</div>
-
-<div class="form-group">
-    <label class="col-md-2 control-label" for="code">URL连接</label>
-    <div class="col-md-10">
-        <input id="url" type="text" name="url" class="form-control" placeholder="URL连接" th:value="${role.url}">
-        <span th:if="${#fields.hasErrors('role.url')}" th:errors="${role.url}"></span>
-    </div>
-</div>
-
 
 <!--<div class="form-group">
     <label class="col-md-2 control-label" for="menuTreeSetBtn">关联菜单</label>
@@ -73,7 +43,7 @@
 <div class="form-group">
     <label class="col-md-2 control-label" for="treeview">资源权限</label>
     <div class="col-md-10">
-        <input id="parentId" name="parentId" type="hidden" th:value="${role.parentId}">
+        <input id="id" name="id" type="hidden" th:value="${role.id}">
         <div id="treeview"></div>
     </div>
 </div>
@@ -152,6 +122,9 @@
       validateFields();
     });
 
+    var nodeCheckedSilent = false;
+    var nodeUncheckedSilent = false;
+
     function createTreeView(){
       //var url= '[[@{/admin/sys/permission/tree}]]';   //  + '?parentId='+$("#parentId").val();
       var url= root + '/admin/sys/permission/tree?parentId='+$("#parentId").val();
@@ -163,10 +136,24 @@
           console.log(datasource);
           $('#treeview').treeview({
             data: datasource,
-            showCheckbox:false,
+            showCheckbox:true,
+            onNodeChecked: nodeChecked,
+            onNodeUnchecked: nodeUnchecked,
             onNodeSelected: function (event, node) {
-                $("#parentId").val(node.id);
-                selecedNode = node;
+              //$("#removeBtn").attr("disabled",false);
+              //$("#editBtn").attr("disabled",false);
+              // var Pid = $('#treeview').treeview('getParent', node.nodeId);  //获取父辈id
+              // //路径追加显示
+              // function func(nodeId, text) //递归调用
+              // {
+              //   if (nodeId == 0) {
+              //     return '富士化工';
+              //   }
+              //   var id = $('#treeview').treeview('getParent', nodeId);
+              //   return func(id.nodeId, id.text) + " > " + text;
+              // }
+              // var locationText = func(node.nodeId, node.text);
+              // $(selectors.currentLocation).html('当前位置：' + locationText);
             },
           });
         },
@@ -177,15 +164,97 @@
     }
 
 
+    function nodeChecked(event, node) {
+       if (nodeCheckedSilent) {
+                return;
+       }
+            nodeCheckedSilent = true;
+            checkAllParent(node);
+            checkAllSon(node);
+            nodeCheckedSilent = false;
+    }
+
+
+    function nodeUnchecked(event, node) {
+        if (nodeUncheckedSilent)
+           return;
+        nodeUncheckedSilent = true;
+        uncheckAllParent(node);
+        uncheckAllSon(node);
+        nodeUncheckedSilent = false;
+     }
+
+    //选中全部父节点
+    function checkAllParent(node) {
+        $('#treeview').treeview('checkNode', node.nodeId, {
+                silent: true
+        });
+
+        var parentNode = $('#searchTree').treeview('getParent', node.nodeId);
+        if (!("nodeId" in parentNode)) {
+            return;
+        } else {
+            checkAllParent(parentNode);
+        }
+    }
+
+     //取消全部父节点
+      function uncheckAllParent(node) {
+         $('#treeview').treeview('uncheckNode', node.nodeId, {
+                silent: true
+         });
+         var siblings = $('#searchTree').treeview('getSiblings', node.nodeId);
+         var parentNode = $('#searchTree').treeview('getParent', node.nodeId);
+         if (!("nodeId" in parentNode)) {
+                return;
+         }
+
+         var isAllUnchecked = true; //是否全部没选中
+         for (var i in siblings) {
+             if (siblings[i].state.checked) {
+                isAllUnchecked = false;
+                break;
+             }
+          }
+
+         if (isAllUnchecked) {
+            uncheckAllParent(parentNode);
+         }
+
+      }
+
+        //级联选中所有子节点
+        function checkAllSon(node) {
+            $('#treeview').treeview('checkNode', node.nodeId, {
+                silent: true
+            });
+            if (node.nodes != null && node.nodes.length > 0) {
+                for (var i in node.nodes) {
+                    checkAllSon(node.nodes[i]);
+                }
+            }
+        }
+        //级联取消所有子节点
+        function uncheckAllSon(node) {
+            $('#treeview').treeview('uncheckNode', node.nodeId, {
+                silent: true
+            });
+            if (node.nodes != null && node.nodes.length > 0) {
+                for (var i in node.nodes) {
+                    uncheckAllSon(node.nodes[i]);
+                }
+            }
+        }
+
      function submitHanlder(){
         var listChecked = $('#treeview').treeview('getChecked');
-        $("#roleForm").remove("#roleIds");
+        $("#roleForm").remove("#permissionIds");
         var length = listChecked.length;
 
         for(var i=0;i<length;i++ ){
-            var role = listChecked[i];
-            var roleIdsHtml = '<input type ="hidden" name="roleIds" value="'+ role.id +'">';
-            $("#roleForm").append(roleIdsHtml);
+            var permission = listChecked[i];
+            var permissionIdsHtml = '<input type ="hidden" name="permissionIds" value="'+ permission.id +'">';
+            $("#roleForm").append(permissionIdsHtml);
         }
       }
 </script>

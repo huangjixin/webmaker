@@ -18,7 +18,7 @@
                 <h3 class="page-header">角色列信息</h3>
                 <form id="roleForm" class="form-horizontal"
                       th:action="@{/admin/sys/role}"
-                      accept-charset="UTF-8" method="post"
+                      accept-charset="UTF-8" method="post" onsubmit="submitHanlder()"
                       style="max-width: 600px;">
                     <div th:include="admin/sys/role/_form::form_role"></div>
                 </form>

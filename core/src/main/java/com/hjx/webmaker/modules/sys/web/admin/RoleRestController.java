@@ -1,6 +1,8 @@
 package com.hjx.webmaker.modules.sys.web.admin;
 
 import com.hjx.webmaker.modules.base.dto.DataGridDto;
+import com.hjx.webmaker.modules.base.dto.ResultVo;
+import com.hjx.webmaker.modules.base.utils.ResultVoUtil;
 import com.hjx.webmaker.modules.base.web.BaseRestController;
 import com.hjx.webmaker.modules.sys.domain.Role;
 import com.hjx.webmaker.modules.sys.domain.RoleCriteria;
@@ -13,13 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 import java.util.List;
 
 @Api(tags = "角色")
@@ -94,9 +94,46 @@ public class RoleRestController extends BaseRestController<Role> {
 
                 example.setOrderByClause(sort + " " + sortOrder);
             } else {
-                example.setOrderByClause("created_time desc");
+                example.setOrderByClause("create_time desc");
             }
         }
         return example;
     }
+
+
+    @ApiOperation(value = "删除对象", notes = "删除对象", httpMethod = "POST", tags = "角色")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "对象ID", dataType = "String", paramType = "query")
+    })
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "删除成功", response = ResultVo.class),
+            @ApiResponse(code = 200, message = "删除成功", response = ResultVo.class),
+    })
+    @PostMapping("deleteByKey/{id}")
+    public ResultVo deleteByKey(@PathVariable(name = "id") String id,
+                                HttpServletRequest request, HttpServletResponse response) {
+        int result = this.roleService.deleteByPrimaryKey(id);
+
+        return result > 0 ? ResultVoUtil.success() : ResultVoUtil.error(400, "删除失败");
+    }
+
+    @ApiOperation(value = "批量删除对象", notes = "批量删除对象", httpMethod = "POST", tags = "角色")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "对象ID", dataType = "String", paramType = "query")
+    })
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "删除成功", response = ResultVo.class),
+            @ApiResponse(code = 200, message = "删除成功", response = ResultVo.class),
+    })
+    @PostMapping("deleteBatch")
+    public ResultVo deleteBatch(@RequestParam List<String> list,
+                                HttpServletRequest request, HttpServletResponse response) {
+//        List<String> list = Arrays.asList(ids);
+        RoleCriteria roleCriteria = new RoleCriteria();
+        roleCriteria.createCriteria().andIdIn(list);
+        int result = this.roleService.deleteByExample(roleCriteria);
+
+        return result > 0 ? ResultVoUtil.success() : ResultVoUtil.error(400, "删除失败");
+    }
+
 }

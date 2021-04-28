@@ -22,7 +22,8 @@
                 <h3 class="page-header">角色信息</h3>
                 <form id="roleForm" class="form-horizontal"
                       th:action="@{'/admin/sys/role/edit/'+ ${role.id}}"
-                      accept-charset="UTF-8" method="POST" style="max-width: 600px;">
+                      accept-charset="UTF-8" method="POST"  onsubmit="submitHanlder()"
+                      style="max-width: 600px;">
                     <input id="id" type="hidden" th:value="${role.id}">
                     <div th:include="admin/sys/role/_form::form_role"></div>
                 </form>

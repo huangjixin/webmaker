@@ -2,8 +2,17 @@ package com.hjx.webmaker.modules.sys.mapper;
 
 import com.hjx.webmaker.modules.base.mapper.BaseMapper;
 import com.hjx.webmaker.modules.sys.domain.RolePermission;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface RolePermissionMapper extends BaseMapper<RolePermission> {
+    /**
+     * 批量插入。
+     * @param rolePermissions
+     * @return
+     */
+    int insertBatch(@Param("rolePermissions") List<RolePermission> rolePermissions);
     /*long countByExample(RolePermissionCriteria example);
 
     int deleteByExample(RolePermissionCriteria example);

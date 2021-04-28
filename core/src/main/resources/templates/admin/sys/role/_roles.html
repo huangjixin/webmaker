@@ -78,14 +78,15 @@
         $.ajax({
             url: [[@{/admin/sys/role/deleteBatch}]],
             cache: false,
-            contentType: "application/json; charset=utf-8",
+            //contentType: "application/json; charset=utf-8",
             type: "POST",
-            dataType: 'json',
+            traditional:true,//必要
+            //dataType: 'json',
             data:{
-              ids:ids
+              list:ids
             },
             success: function (data) {
-                if(data == 200){
+                if(data.code == 200){
                     $('#rolesGrid').bootstrapTable("refresh");
                     $("#removeBtn").attr("disabled",true);
                 }else{

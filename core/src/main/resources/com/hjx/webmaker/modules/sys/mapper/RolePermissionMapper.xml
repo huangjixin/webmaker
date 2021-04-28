@@ -131,12 +131,13 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.hjx.webmaker.modules.sys.domain.RolePermissionCriteria" resultType="java.lang.Long">
-    select count(*) from sys_role_permission
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
+    <select id="countByExample" parameterType="com.hjx.webmaker.modules.sys.domain.RolePermissionCriteria"
+            resultType="java.lang.Long">
+      select count(*) from sys_role_permission
+      <if test="_parameter != null">
+        <include refid="Example_Where_Clause"/>
+      </if>
+    </select>
   <update id="updateByExampleSelective" parameterType="map">
     update sys_role_permission
     <set>
@@ -178,7 +179,15 @@
   <update id="updateByPrimaryKey" parameterType="com.hjx.webmaker.modules.sys.domain.RolePermission">
     update sys_role_permission
     set PERMISSION_ID = #{permissionId,jdbcType=VARCHAR},
-      ROLE_ID = #{roleId,jdbcType=VARCHAR}
+    ROLE_ID = #{roleId,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=VARCHAR}
   </update>
+
+  <insert id="insertBatch">
+    INSERT INTO sys_role_permission(ID,ROLE_ID,PERMISSION_ID)
+    VALUES
+    <foreach collection="rolePermissions" item="rolePermission" separator=",">
+      (#{rolePermission.id},#{rolePermission.roleId},#{rolePermission.permissionId})
+    </foreach>
+  </insert>
 </mapper>
