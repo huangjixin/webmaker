@@ -22,7 +22,7 @@
                 <h3 class="page-header">用户信息</h3>
                 <form id="userForm" class="form-horizontal"
                       th:action="@{'/admin/sys/user/edit/'+ ${user.id}}"
-                      accept-charset="UTF-8" method="POST"  onsubmit="submitHanlder()"
+                      accept-charset="UTF-8" method="POST"
                       style="max-width: 600px;">
                     <input id="id" type="hidden" th:value="${user.id}">
                     <div th:include="admin/sys/user/_form::form_user"></div>

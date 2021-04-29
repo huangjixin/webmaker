@@ -59,6 +59,7 @@ public class UserController extends BaseController<User> {
         uiModel.addAttribute("roles", roles);
         UserDto user = this.userService.selectByUserName(id);
         user.setRoleIdsByRoles();
+        user.setRoles(roles);
         uiModel.addAttribute("user", user);
         return prefix + "/edit";
     }
@@ -84,9 +85,8 @@ public class UserController extends BaseController<User> {
     @PostMapping("edit/{id}")
     public String edit(Model uiModel, @PathVariable("id") String id, @ModelAttribute UserDto user, HttpServletRequest request, HttpServletResponse response) {
         UserDto u = this.userService.selectByUserName(id);
-        ;
-        user.setRoleIdsByRoles();
-        user.setUpdateTime(new Date());
+//        user.setRoleIdsByRoles();
+//        user.setUpdateTime(new Date());
         this.userService.update(user);
         uiModel.addAttribute("user", user);
         return "redirect:/" + prefix + "/edit/" + id;

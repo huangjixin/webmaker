@@ -28,7 +28,7 @@ public class UserDto extends User
 
     public void setRoleIdsByRoles() {
         for (Role role : roles) {
-            this.roleIds.add(role.getId());
+            this.roleIds.add(new String (role.getId()));
         }
     }
 
@@ -46,7 +46,7 @@ public class UserDto extends User
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
-        this.setRoleIdsByRoles();
+//        this.setRoleIdsByRoles();
     }
 
     public List<Permission> getPermissions() {

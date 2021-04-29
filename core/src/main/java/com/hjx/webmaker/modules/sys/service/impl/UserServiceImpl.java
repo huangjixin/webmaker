@@ -21,9 +21,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Service("userService")
@@ -123,7 +125,9 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int update(UserDto userDto) {
+        userDto.setUpdateTime(new Date());
         userDto.setPassword(null);
         int result = super.updateByPrimaryKeySelective(userDto);
 
