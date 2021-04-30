@@ -29,10 +29,10 @@ import java.util.Map;
  * @author 黄记新
  *
  */
-@Configuration
-@EnableWebSecurity
+//@Configuration
+//@EnableWebSecurity
 //@Order(1)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig1 extends WebSecurityConfigurerAdapter {
 
     @Autowired
     @Qualifier(value = "userService")

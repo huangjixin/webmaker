@@ -8,16 +8,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 /**
  * Created by 黄记新（Tony）  on 2017/5/27.
  */
-@Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+//@Configuration
+//@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class GlobalMethodSecurityConfiguration {
 
     /**
      * 添加加密类。
      * @return
      */
-    @Bean(name="serverBCryptPasswordEncoder")
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+//    @Bean(name="serverBCryptPasswordEncoder")
+//    public BCryptPasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
 }

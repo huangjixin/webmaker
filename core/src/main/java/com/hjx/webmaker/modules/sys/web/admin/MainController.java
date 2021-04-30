@@ -1,16 +1,19 @@
 package com.hjx.webmaker.modules.sys.web.admin;
 
 import com.hjx.webmaker.modules.sys.dto.LoginUser;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("admin")
-public class MainController {
+public class MainController implements AuthenticationManager {
  
     @GetMapping("/")
     public String root() {
@@ -34,6 +37,12 @@ public class MainController {
         return "/admin/login";
     }
 
+    @PostMapping("/login")
+    public String loginProcess(LoginUser loginUser, Model uiModel) {
+        uiModel.addAttribute("loginUser", loginUser);
+        return "/admin/login";
+    }
+
     @GetMapping("/login-error")
     public String loginError(LoginUser loginUser,Model model) {
         model.addAttribute("loginUser", loginUser);
@@ -51,5 +60,10 @@ public class MainController {
     @GetMapping("/search")
     public String search() {
         return "search";
+    }
+
+    @Override
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        return null;
     }
 }
