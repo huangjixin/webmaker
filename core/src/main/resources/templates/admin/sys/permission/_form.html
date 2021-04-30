@@ -49,6 +49,33 @@
 </div>
 
 <div class="form-group">
+    <label class="col-md-2 control-label">是否过期</label>
+    <div class="col-md-10">
+        <input type="radio" name="isExpired" value="1" th:attr="checked=${permission.isExpired==1?true:false}">&nbsp;是
+        <input type="radio" name="isExpired" value="0" th:attr="checked=${permission.isExpired==0?true:false}">&nbsp;否
+        <span th:if="${#fields.hasErrors('permission.isExpired')}" th:errors="${permission.isExpired}"></span>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2 control-label">是否锁定</label>
+    <div class="col-md-10">
+        <input type="radio" name="isLocked" value="1" th:attr="checked=${permission.isLocked==1?true:false}">&nbsp;是
+        <input type="radio" name="isLocked" value="0" th:attr="checked=${permission.isLocked==0?true:false}">&nbsp;否
+        <span th:if="${#fields.hasErrors('permission.isLocked')}" th:errors="${permission.isLocked}"></span>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-md-2 control-label">是否可用</label>
+    <div class="col-md-10">
+        <input type="radio" name="isEnabled" value="1" th:attr="checked=${permission.isEnabled==1?true:false}">&nbsp;是
+        <input type="radio" name="isEnabled" value="0" th:attr="checked=${permission.isEnabled==0?true:false}">&nbsp;否
+        <span th:if="${#fields.hasErrors('permission.isEnabled')}" th:errors="${permission.isEnabled}"></span>
+    </div>
+</div>
+
+<div class="form-group">
     <label class="col-md-2 control-label" for="code">URL连接</label>
     <div class="col-md-10">
         <input id="url" type="text" name="url" class="form-control" placeholder="URL连接" th:value="${permission.url}">
