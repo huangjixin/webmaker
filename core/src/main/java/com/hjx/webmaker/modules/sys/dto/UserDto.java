@@ -23,6 +23,16 @@ public class UserDto extends User
 
     private List<Permission> permissions = new ArrayList<Permission>();
 
+    public List<Permission> getMenus() {
+        return menus;
+    }
+
+    public void setMenus(List<Permission> menus) {
+        this.menus = menus;
+    }
+
+    private List<Permission> menus = new ArrayList<Permission>();
+
     private List treePermissions = new ArrayList();
 
 

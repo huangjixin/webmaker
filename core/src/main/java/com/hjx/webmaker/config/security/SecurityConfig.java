@@ -2,6 +2,8 @@ package com.hjx.webmaker.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hjx.webmaker.config.security.filter.AuthenticationFilter;
+import com.hjx.webmaker.modules.base.utils.TreeHelper;
+import com.hjx.webmaker.modules.sys.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +18,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,6 +29,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -134,17 +138,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 })
                 .and()
                 .logout()
+                .logoutUrl("/admin/logout")
                 //退出成功，返回json
                 .logoutSuccessHandler((request, response, authentication) -> {
-                    Map<String, Object> map = new HashMap<String, Object>();
-                    map.put("code", 200);
-                    map.put("message", "退出成功");
-                    map.put("data", authentication);
-                    response.setContentType("application/json;charset=utf-8");
-                    PrintWriter out = response.getWriter();
-                    out.write(objectMapper.writeValueAsString(map));
-                    out.flush();
-                    out.close();
+                    String header = request.getHeader("X-Requested-With");
+                    boolean isAjax = "XMLHttpRequest".equals(header) ? true : false;
+                    if (isAjax) {
+                        Map<String, Object> map = new HashMap<String, Object>();
+                        map.put("code", 200);
+                        map.put("message", "退出成功");
+                        map.put("data", authentication);
+                        response.setContentType("application/json;charset=utf-8");
+                        PrintWriter out = response.getWriter();
+                        out.write(objectMapper.writeValueAsString(map));
+                        out.flush();
+                        out.close();
+                    } else {
+                        response.sendRedirect("/admin/login");
+                    }
+
                 })
                 .permitAll();
         http.addFilterAt(authenticationFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -201,7 +213,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 out.write(objectMapper.writeValueAsString(map));
                 out.flush();
                 out.close();
-            }else{
+            }else {
+                UserDto userDto = (UserDto) authentication.getPrincipal();
+                if (userDto != null) {
+                    List permissions = userDto.getPermissions();
+                    permissions = TreeHelper.getTreeNodes(permissions);
+                    userDto.setMenus(permissions);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
                 response.sendRedirect("/admin/index");
             }
         });

@@ -62,6 +62,7 @@
 
                 <li>
                     <a th:href="@{/admin/user/info}">欢迎您：
+                        <th:block sec:authentication="name"></th:block>
                         <!--<th:block th:text="${session.user.loginName}"></th:block>-->
                         <!--<th:block sec:authentication="principal.username"></th:block>--></a>
                 </li>

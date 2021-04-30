@@ -37,12 +37,6 @@ public class MainController implements AuthenticationManager {
         return "/admin/login";
     }
 
-    @PostMapping("/login")
-    public String loginProcess(LoginUser loginUser, Model uiModel) {
-        uiModel.addAttribute("loginUser", loginUser);
-        return "/admin/login";
-    }
-
     @GetMapping("/login-error")
     public String loginError(LoginUser loginUser,Model model) {
         model.addAttribute("loginUser", loginUser);

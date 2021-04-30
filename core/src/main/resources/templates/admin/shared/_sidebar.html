@@ -77,6 +77,21 @@
             </li>
         </ul>
     </li>
+    <li th:if="${#authentication.principal != null && #authentication.principal.menus != null }" data-th-each="menu : ${#authentication.principal.menus}" th:class="${menuname.contains(menu.name)?'active':''}">
+        <a th:href="@{${menu.url}}" th:if="${menu.children == null }">
+            <label th:text="${menu.name}"></label>
+        </a>
+        <a th:id="${'code'+menu.code}" th:href="${'#menu'+menu.id}" th:if="${menu.children != null }"  class="nav-header collapsed" data-toggle="collapse">
+            <label  th:text="${menu.name}"></label><span class="pull-right"><b>>></b></span>
+        </a>
+        <ul th:id="${'menu'+menu.id}" th:if="${menu.children != null }"  class="nav nav-list collapse secondmenu" style="height:0px;">
+            <li data-th-each="child : ${menu.children}"  th:class="${child.name.contains(menuname)?'active':''}">
+                <a th:href="@{${child.url}}" style="padding-left:30px;">
+                    <span th:text="${child.name}"></span>
+                </a>
+            </li>
+        </ul>
+    </li>
     <!--<li th:if="${session.user != null && session.user.permissions != null }" data-th-each="menu : ${session.user.permissions}" th:class="${menuname.contains(menu.name)?'active':''}">
         <a th:href="@{${menu.url}}" th:if="${menu.children == null }">
             <label th:text="${menu.name}"></label>
