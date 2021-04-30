@@ -161,7 +161,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll();
         http.addFilterAt(authenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         //开启跨域访问
-        http.cors().disable();
+        http.cors().disable().headers().frameOptions().sameOrigin();// 解决iframe无法访问;
         //开启模拟请求，比如API POST测试工具的测试，不开启时，API POST为报403错误
         http.csrf().disable();
     }
