@@ -90,6 +90,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/admin/login") //使用自带的登录
 //                .loginProcessingUrl("")
+                .and()
+                .logout().invalidateHttpSession(true).deleteCookies("JSESSIONID")
                 .permitAll()
                 //登录失败，返回json
 //                .failureHandler((request, response, ex) -> {
