@@ -44,6 +44,7 @@ management:
 
 #配置MyBatis
 mybatis:
+  config-location: classpath:mybatis-config.xml
   type-aliases-package: com.hjx.webmaker.modules.*.domain
   mapper-locations: classpath:com/hjx/webmaker/modules/*/mapper/*.xml
 

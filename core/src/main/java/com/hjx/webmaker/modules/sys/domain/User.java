@@ -1,6 +1,8 @@
 package com.hjx.webmaker.modules.sys.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.hjx.webmaker.modules.base.intercept.DesensitionType;
+import com.hjx.webmaker.modules.base.intercept.Desensitization;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -30,6 +32,7 @@ public class User implements Serializable {
     /**
      * 
      */
+    @Desensitization(type = DesensitionType.REAL_NAME)//脱敏定义
     private String realName;
 
     /**
@@ -87,6 +90,7 @@ public class User implements Serializable {
     /**
      * 
      */
+    @Desensitization(type = DesensitionType.EMAIL)//脱敏定义
     private String email;
 
     /**
@@ -97,6 +101,7 @@ public class User implements Serializable {
     /**
      * 
      */
+    @Desensitization(type = DesensitionType.PHONE)//脱敏定义
     private String mobile;
 
     /**
