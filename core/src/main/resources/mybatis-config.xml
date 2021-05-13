@@ -5,10 +5,10 @@
 <configuration>
     <!-- 注意 plugins 在配置文件中的位置
         properties?, settings?, typeAliases?, typeHandlers?, objectFactory?, objectWrapperFactory?, plugins?, environments?, databaseIdProvider?, mappers? -->
-    <plugins>
+    <!--<plugins>
         <plugin interceptor="com.hjx.webmaker.modules.base.intercept.DesensitizationInterceptor">
             <property name="desensitization" value="true"/>
         </plugin>
-    </plugins>
+    </plugins>-->
 
 </configuration>

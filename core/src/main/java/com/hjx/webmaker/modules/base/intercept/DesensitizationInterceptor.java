@@ -22,7 +22,6 @@ import java.util.regex.Matcher;
 /**
  * mybatis脱敏处理
  *
- * @author 傻根她弟
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 @Intercepts({
@@ -51,6 +50,10 @@ public class DesensitizationInterceptor implements Interceptor {
             String sqlId = mappedStatement.getId();
             BoundSql boundSql = mappedStatement.getBoundSql(parameter);
             Configuration configuration = mappedStatement.getConfiguration();
+/*            Connection connection = configuration.getEnvironment().getDataSource().getConnection();
+            connection.getClientInfo();
+            String schema = configuration.getDatabaseId();
+            System.out.println(schema);*/
             //获取真实的sql语句
             String sql = getSql(configuration, boundSql, sqlId, 0);
 

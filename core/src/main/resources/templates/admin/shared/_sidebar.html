@@ -77,7 +77,7 @@
             </li>-->
         </ul>
     </li>
-    <li th:if="${#authentication.principal != null && #authentication.principal.menus != null }" data-th-each="menu : ${#authentication.principal.menus}" th:class="${menuname.contains(menu.name)?'active':''}">
+    <li th:if="${#authentication.principal != null && #authentication.principal.treePermissions != null }" data-th-each="menu : ${#authentication.principal.treePermissions}" th:class="${menuname.contains(menu.name)?'active':''}">
         <a th:href="@{${menu.url}}" th:if="${menu.children == null }">
             <label th:text="${menu.name}"></label>
         </a>
