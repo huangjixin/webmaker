@@ -32,6 +32,9 @@ import java.util.regex.Matcher;
 public class DesensitizationInterceptor implements Interceptor {
     private static final Logger logger = LoggerFactory.getLogger(DesensitizationInterceptor.class);
     private boolean desensitization = true;//脱敏
+    private String schema;
+    private String host;
+    private String port;
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
@@ -57,7 +60,29 @@ public class DesensitizationInterceptor implements Interceptor {
             //获取真实的sql语句
             String sql = getSql(configuration, boundSql, sqlId, 0);
 
-            System.out.println(sql);
+            logger.info("本次运行的SQL语句是：{}", sql);
+            if (sql.trim().toLowerCase().startsWith("select")) {
+                String sql2 = sql.trim().toLowerCase();
+                int selectIndex = sql2.indexOf("select");
+                int fromIndex = sql2.indexOf("from");
+                String fieldsStr = sql2.substring(selectIndex + "select".length(), fromIndex);
+                logger.info("字段是：{}", fieldsStr);
+                String[] fieldsArr = fieldsStr.split(",");
+                for (String f: fieldsArr) {
+                    f = f.trim();
+                    // 空格
+                    int trimIndex = f.indexOf(" ");
+                    if(trimIndex != -1){
+                        // --- 有别名的处理情况。
+                        f = f.substring(0,trimIndex);
+                    }
+                    int dotIndex = f.indexOf(".");
+                    if(dotIndex != -1){
+                        f= f.substring(dotIndex+1,f.length());
+                    }
+                    logger.info("筛选后的数据库字段是：{}",f);
+                }
+            }
 
             if (result instanceof ArrayList<?>) {
                 List<?> list = (ArrayList<?>) result;
@@ -109,6 +134,8 @@ public class DesensitizationInterceptor implements Interceptor {
                         if (String.class != field.getType() || (desensitization = field.getAnnotation(Desensitization.class)) == null) {
                             continue;
                         }
+
+                        logger.info("匹配到表名：" + desensitization.tableName() + ",字段名：" + desensitization.fieldName() + "映射的Java Bean属性名：" + field.getName());
                         field.setAccessible(true);
                         String value = null;
                         try {
@@ -277,8 +304,8 @@ public class DesensitizationInterceptor implements Interceptor {
                                  String sqlId, long time) {
         String sql = showSql(configuration, boundSql);
         StringBuilder str = new StringBuilder(100);
-        str.append(sqlId);
-        str.append(":");
+//        str.append(sqlId);
+//        str.append(":");
         str.append(sql);
         return str.toString();
     }

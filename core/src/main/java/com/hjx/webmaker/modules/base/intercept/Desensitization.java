@@ -19,6 +19,17 @@ public @interface Desensitization {
     DesensitionType type();
 
     /**
+     * 表名
+     * @return
+     */
+    String tableName() default "";
+
+    /**
+     * 域名
+     * @return
+     */
+    String fieldName() default "";
+    /**
      * 附加值, 自定义正则表达式等
      *
      * @return

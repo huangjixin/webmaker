@@ -101,7 +101,7 @@ public class User implements Serializable {
     /**
      * 
      */
-    @Desensitization(type = DesensitionType.PHONE)//脱敏定义
+    @Desensitization(type = DesensitionType.PHONE,tableName = "sys_user",fieldName = "mobile")//脱敏定义
     private String mobile;
 
     /**
