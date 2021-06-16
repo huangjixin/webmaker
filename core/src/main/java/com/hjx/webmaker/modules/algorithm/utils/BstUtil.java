@@ -15,12 +15,12 @@ public class BstUtil {
         preOrd(node7);
     }
 
-    private static void postOrd(BstNode node){
+    private static void midOrd(BstNode node){
         if(node == null) {
             return;
         }
-        postOrd(node.getLeft_child());
-        postOrd(node.getRight_child());
+        midOrd(node.getLeft_child());
+        midOrd(node.getRight_child());
         System.out.println(node.getData());
     }
 
@@ -29,7 +29,7 @@ public class BstUtil {
             return;
         }
         System.out.println(node.getData());
-        postOrd(node.getLeft_child());
-        postOrd(node.getRight_child());
+        midOrd(node.getLeft_child());
+        midOrd(node.getRight_child());
     }
 }

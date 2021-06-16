@@ -16,6 +16,9 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
+/**
+ *
+ */
 @Service("permissionService")
 public class PermissionServiceImpl extends BaseServiceImpl<Permission> implements IPermissionService {
 
